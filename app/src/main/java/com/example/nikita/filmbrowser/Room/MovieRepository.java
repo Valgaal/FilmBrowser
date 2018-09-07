@@ -2,7 +2,7 @@ package com.example.nikita.filmbrowser.Room;
 
 import android.app.Application;
 
-import com.example.nikita.filmbrowser.FilmsAPI;
+import com.example.nikita.filmbrowser.MoviesAPI;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.NetworkRequestWork;
 
@@ -11,25 +11,31 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Scheduler;
 
-public class FilmRepository {
+public class MovieRepository {
 
-    private static final String BASE_SEARCH_URL = "http://api.myservice.com/";
+    private static final String BASE_SEARCH_URL = "https://api.themoviedb.org/3/";
+    public final static String API_KEY = "655780709d6f3360d269a64bd96c99d6";
+    public final static String IMAGE_PATH = "https://image.tmdb.org/t/p/w500";
 
-    private FilmDao dao;
+    private MovieDao dao;
     private Application application;
+    private MoviesAPI api;
 
-    public FilmRepository(final Application application1){
+    public MovieRepository(final Application application1){
         application = application1;
-        FilmRoomDatabase db = FilmRoomDatabase.getInstance(application);
+        MoviewRoomDatabase db = MoviewRoomDatabase.getInstance(application);
         dao = db.filmDao();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_SEARCH_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .build();
+        api = retrofit.create(MoviesAPI.class);
     }
 
     public void getTrendingDailyWM(){
@@ -41,14 +47,8 @@ public class FilmRepository {
         WorkManager.getInstance().enqueue(trendingRequest);
     }
 
-    public void createRetrofitClient(){
-
-        //add As Singleton
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_SEARCH_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(rx.schedulers.Schedulers.io()))
-                .build();
+    public Observable<SearchModel> searchByApi(String query){
+        return api.getSearchResult(API_KEY, query);
 
 
 //        Observable<User> call = apiService.getUser(username);
@@ -73,9 +73,6 @@ public class FilmRepository {
 //                    public void onNext(User user) {
 //                    }
 //                });
-
-
-
 
     }
 

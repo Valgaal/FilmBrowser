@@ -4,4 +4,7 @@
     <string name="title_search">Search</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_daily_trending">Daily Trending</string>
+    <string name="example_search">E.g. Avengers</string>
+    <string name="results">Results</string>
+    <string name="not_found">Not found</string>
 </resources>

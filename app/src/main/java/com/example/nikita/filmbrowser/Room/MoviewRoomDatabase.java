@@ -5,18 +5,18 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Film.class}, version = 1)
-public abstract class FilmRoomDatabase extends RoomDatabase {
-    public  abstract FilmDao filmDao();
+@Database(entities = {Movie.class}, version = 1)
+public abstract class MoviewRoomDatabase extends RoomDatabase {
+    public  abstract MovieDao filmDao();
 
-    private static FilmRoomDatabase INSTANCE;
+    private static MoviewRoomDatabase INSTANCE;
 
-    static FilmRoomDatabase getInstance(final Context context){
+    static MoviewRoomDatabase getInstance(final Context context){
         if(INSTANCE == null){
-            synchronized (FilmRoomDatabase.class){
+            synchronized (MoviewRoomDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext() ,
-                            FilmRoomDatabase.class, "film_information").build();
+                            MoviewRoomDatabase.class, "film_information").build();
                 }
             }
         }
