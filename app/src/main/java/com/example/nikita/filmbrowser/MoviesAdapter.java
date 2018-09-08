@@ -45,12 +45,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder moviesViewHolder, int i) {
         SearchResultModel movie = mMovies.get(i);
-        moviesViewHolder.title.setText(movie.getTitle());
+        if(movie.getTitle() == null){
+            moviesViewHolder.title.setText(movie.getName());
+        }else{
+            moviesViewHolder.title.setText(movie.getTitle());
+        }
         moviesViewHolder.ratingAvg.setText(Double.toString(movie.getVoteAverage()));
         if(movie.getPosterPath()!= null) {
             Picasso.get()
                     .load(MovieRepository.IMAGE_PATH.concat(movie.getPosterPath()))
-                    .resize(100,100)
+                    .resize(200,200)
                     .centerInside()
                     .into(moviesViewHolder.poster);
         }
