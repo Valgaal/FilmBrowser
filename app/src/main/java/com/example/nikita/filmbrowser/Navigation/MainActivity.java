@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.Navigation;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -8,7 +8,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import io.reactivex.disposables.Disposable;
+import com.example.nikita.filmbrowser.Navigation.FragmentFavorites;
+import com.example.nikita.filmbrowser.Navigation.FragmentSearch;
+import com.example.nikita.filmbrowser.Navigation.FragmentTrending;
+import com.example.nikita.filmbrowser.R;
 
 
 public class MainActivity extends AppCompatActivity {

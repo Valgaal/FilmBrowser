@@ -208,8 +208,27 @@ public class SearchResultModel {
         this.adult = adult;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public String convertReleaseDate() {
+        if (releaseDate != null) { //проверка какая из двух дат пришла
+            if(releaseDate.length() != 7 ) { //проверка на то, что дата сконвертирована
+                if (!releaseDate.equals("")) {
+                    return " (".concat(releaseDate.substring(0, 4)).concat(")");
+                } else {
+                    return "";
+                }
+            }else{
+                return releaseDate;
+            }
+        }else{
+            if (firstAirDate != null) {
+                if (!firstAirDate.equals("")) {
+                    return " (".concat(firstAirDate.substring(0, 4)).concat(")");
+                }
+                setReleaseDate(firstAirDate);
+            }
+            return " ";
+        }
+
     }
 
     public void setReleaseDate(String releaseDate) {

@@ -3,28 +3,46 @@ package com.example.nikita.filmbrowser;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
+import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.Room.MovieDao;
+import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Room.MoviewRoomDatabase;
+
+import java.util.List;
+
 
 import androidx.work.Worker;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class NetworkRequestWork extends Worker {
 
-    public static final String TAG = "work";
+    private Disposable disposable;
+
     @NonNull
     @Override
     public Result doWork() {
-        Log.d(TAG, "doWork: start");
+        MovieRepository repository = ((App) getApplicationContext()).getRepository();
 
-        try {
-            for (int i = 0; i < 1; i++) {
-                TimeUnit.SECONDS.sleep(10);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(repository.wmJob()){
+            return Result.SUCCESS;
+        }else{
+            return  Result.FAILURE;
         }
+    }
 
-        Log.d(TAG, "doWork: end");
-
-        return Result.SUCCESS;
+    @Override
+    public void onStopped(boolean cancelled) {
+        super.onStopped(cancelled);
+        if(disposable != null) {
+            disposable.dispose();
+        }
     }
 }

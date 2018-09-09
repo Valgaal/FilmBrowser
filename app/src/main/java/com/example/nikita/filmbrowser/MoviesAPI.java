@@ -14,4 +14,7 @@ public interface MoviesAPI {
     Observable<SearchModel> getSearchResult(
             @Query("api_key") String api_key,
             @Query("query") String query);
+
+    @GET("trending/all/day")
+    Observable<SearchModel> getTrendingDay(@Query("api_key") String api_key);
 }

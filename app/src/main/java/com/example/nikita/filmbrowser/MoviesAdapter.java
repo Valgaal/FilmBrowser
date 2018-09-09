@@ -46,9 +46,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public void onBindViewHolder(@NonNull MoviesViewHolder moviesViewHolder, int i) {
         SearchResultModel movie = mMovies.get(i);
         if(movie.getTitle() == null){
-            moviesViewHolder.title.setText(movie.getName());
+            moviesViewHolder.title.setText(movie.getName().concat(movie.convertReleaseDate()));
         }else{
-            moviesViewHolder.title.setText(movie.getTitle());
+            moviesViewHolder.title.setText(movie.getTitle().concat(movie.convertReleaseDate()));
         }
         moviesViewHolder.ratingAvg.setText(Double.toString(movie.getVoteAverage()));
         if(movie.getPosterPath()!= null) {

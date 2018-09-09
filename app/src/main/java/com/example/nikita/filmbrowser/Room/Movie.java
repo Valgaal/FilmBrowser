@@ -28,6 +28,28 @@ public class Movie {
     @ColumnInfo(name = "ReleaseDate")
     private String releaseDate;
 
+    @ColumnInfo(name = "Favorites")
+    private boolean favorites;
+
+    @ColumnInfo(name = "Trending")
+    private boolean trending;
+
+    public boolean isTrending() {
+        return trending;
+    }
+
+    public void setTrending(boolean trending) {
+        this.trending = trending;
+    }
+
+    public boolean isFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(boolean favorites) {
+        this.favorites = favorites;
+    }
+
     public int getId() {
         return id;
     }

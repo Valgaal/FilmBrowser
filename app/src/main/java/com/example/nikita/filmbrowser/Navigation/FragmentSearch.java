@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.Navigation;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.MovieViewModel;
+import com.example.nikita.filmbrowser.MoviesAdapter;
+import com.example.nikita.filmbrowser.R;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +38,7 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.OnViewClic
         EditText editText = view.findViewById(R.id.searchEditText);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MoviesAdapter(getActivity(), FragmentSearch.this);
+        mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
 
         searchButton.setOnClickListener(view1 ->
@@ -78,11 +81,11 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.OnViewClic
 
     @Override
     public void filmSelected(int id) {
-
+            Toast.makeText(getActivity(),"Film Details", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void addedToFav(int id) {
-
+            Toast.makeText(getActivity(),"Favorites", Toast.LENGTH_SHORT).show();
     }
 }
