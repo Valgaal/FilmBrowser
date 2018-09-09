@@ -7,4 +7,11 @@
     <string name="example_search">E.g. Avengers</string>
     <string name="results">Results</string>
     <string name="not_found">Not found</string>
+    <string name="date">Date:</string>
+    <string name="genres">Genres:</string>
+    <string name="country">Country:</string>
+    <string name="runtime">Runtime:</string>
+    <string name="revenue">Revenue:</string>
+    <string name="status">Status:</string>
+    <string name="movie_details">Movie details</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.nikita.filmbrowser.Navigation;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,20 +57,16 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.OnViewCl
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
-        SharedPreferences sp = getActivity().getSharedPreferences(MovieRepository.MY_PREF, Context.MODE_PRIVATE);
-        final String id = sp.getString(MovieRepository.WORK_REQUEST_ID,"");
         updateScreen();
 
         mSwipe.setOnRefreshListener(() -> {
             mMovieViewModel.startRequestFromDailyTrending();
-
+            SharedPreferences sp = getActivity().getSharedPreferences(MovieRepository.MY_PREF, Context.MODE_PRIVATE);
+            final String id = sp.getString(MovieRepository.WORK_REQUEST_ID,"");
             WorkManager.getInstance().getStatusById(UUID.fromString(id))
                     .observe(this, workStatus -> {
                         if(workStatus != null && workStatus.getState().isFinished()) {
                             updateScreen();
-                        }else{
-                            Toast.makeText(getActivity(), "Work Failed", Toast.LENGTH_LONG).show();
-                            mSwipe.setRefreshing(false);
                         }
                     });
         });
@@ -112,7 +109,9 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.OnViewCl
 
     @Override
     public void filmSelected(int id) {
-
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(FragmentDetails.ID,id);
+        startActivity(intent);
     }
 
     @Override
