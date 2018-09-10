@@ -26,6 +26,6 @@ public interface MovieDao {
     Single<Movie> getMovieById(int id);
 
     @Query("SELECT * FROM film_information WHERE Favorites = 1")
-    Single<Movie> getFavorites();
+    Single<List<Movie>> getFavorites();
 
 }

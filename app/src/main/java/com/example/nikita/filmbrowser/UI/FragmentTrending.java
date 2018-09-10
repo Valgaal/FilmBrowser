@@ -18,6 +18,7 @@ import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 
 import java.util.List;
@@ -65,10 +66,10 @@ public class FragmentTrending extends BaseListFragment{
         disposable = mMovieViewModel.getTrendingDay()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<SearchResultModel>>() {
+                .subscribeWith(new DisposableObserver<List<Movie>>() {
 
                     @Override
-                    public void onNext(List<SearchResultModel> searchModel) {
+                    public void onNext(List<Movie> searchModel) {
                         mAdapter.setFilms(searchModel);
                         mSwipe.setRefreshing(false);
                     }
@@ -97,12 +98,16 @@ public class FragmentTrending extends BaseListFragment{
     }
 
     @Override
-    public void addedToFav(SearchResultModel model) {
-        super.addedToFav(model);
+    public void addedToFav(Movie movie) {
+        movie.setFavorites(true);
+        mMovieViewModel.updateMovie(movie);
+        super.addedToFav(movie);
     }
 
     @Override
-    public void deleteFromFav(SearchResultModel model) {
-        super.deleteFromFav(model);
+    public void deleteFromFav(Movie movie) {
+        movie.setFavorites(false);
+        mMovieViewModel.updateMovie(movie);
+        super.deleteFromFav(movie);
     }
 }

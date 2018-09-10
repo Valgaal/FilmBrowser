@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
+import com.example.nikita.filmbrowser.Room.Movie;
 
 import io.reactivex.disposables.Disposable;
 
@@ -40,12 +40,12 @@ public class BaseListFragment  extends Fragment implements MoviesAdapter.OnViewC
     }
 
     @Override
-    public void addedToFav(SearchResultModel id) {
+    public void addedToFav(Movie movie) {
 
     }
 
     @Override
-    public void deleteFromFav(SearchResultModel id) {
+    public void deleteFromFav(Movie movie) {
 
     }
 }

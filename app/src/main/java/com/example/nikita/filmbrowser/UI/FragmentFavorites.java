@@ -15,6 +15,7 @@ import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Room.Movie;
 
 import java.util.List;
 
@@ -29,21 +30,21 @@ public class FragmentFavorites extends BaseListFragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
 
-        disposable = mMovieViewModel.getTrendingDay()
+        disposable = mMovieViewModel.getFavorites()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<SearchResultModel>>() {
+                .subscribeWith(new DisposableObserver<List<Movie>>() {
 
                     @Override
-                    public void onNext(List<SearchResultModel> searchModel) {
-                        mAdapter.setFilms(searchModel);
+                    public void onNext(List<Movie> movies) {
+                        mAdapter.setFilms(movies);
                     }
 
                     @Override
@@ -70,12 +71,19 @@ public class FragmentFavorites extends BaseListFragment{
     }
 
     @Override
-    public void addedToFav(SearchResultModel model) {
-        super.addedToFav(model);
+    public void addedToFav(Movie movie) {
+        movie.setFavorites(false);
+        mMovieViewModel.updateMovie(movie);
+        mAdapter.deleteMovie(movie);
+        super.deleteFromFav(movie);
     }
 
     @Override
-    public void deleteFromFav(SearchResultModel model) {
-        super.deleteFromFav(model);
+    public void deleteFromFav(Movie movie) {
+        movie.setFavorites(true);
+        mMovieViewModel.updateMovie(movie);
+        mAdapter.notifyDataSetChanged();
+        super.addedToFav(movie);
     }
+
 }

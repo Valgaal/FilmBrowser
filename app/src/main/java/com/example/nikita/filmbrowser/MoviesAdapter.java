@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.squareup.picasso.Picasso;
 
@@ -19,15 +20,15 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    private List<SearchResultModel> mMovies;
+    private List<Movie> mMovies;
     private Context context;
     private OnViewClicked mCallback;
     private final LayoutInflater mInflater;
 
     public interface OnViewClicked{
         void filmSelected(int id);
-        void addedToFav(SearchResultModel id);
-        void deleteFromFav(SearchResultModel id);
+        void addedToFav(Movie movie);
+        void deleteFromFav(Movie movie);
     }
 
     public MoviesAdapter(Context context, Fragment fragment) {
@@ -45,13 +46,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder moviesViewHolder, int i) {
-        SearchResultModel movie = mMovies.get(i);
-        if(movie.getTitle() == null){
-            moviesViewHolder.title.setText(movie.getName().concat(movie.convertReleaseDate()));
-        }else{
-            moviesViewHolder.title.setText(movie.getTitle().concat(movie.convertReleaseDate()));
-        }
-        moviesViewHolder.ratingAvg.setText(Double.toString(movie.getVoteAverage()));
+        Movie movie = mMovies.get(i);
+        moviesViewHolder.title.setText(movie.getTitle().concat(movie.getReleaseDate()));
+        moviesViewHolder.ratingAvg.setText(Double.toString(movie.getRatingAvg()));
         if(movie.getPosterPath()!= null) {
             Picasso.get()
                     .load(MovieRepository.IMAGE_PATH.concat(movie.getPosterPath()))
@@ -61,6 +58,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         }
         moviesViewHolder.itemView.setOnClickListener(view -> mCallback.filmSelected(movie.getId()));
         moviesViewHolder.favButton.setOnClickListener(new FavClick(movie, moviesViewHolder.favButton));
+        if(movie.isFavorites()){
+            moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+        }else{
+            moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+        }
     }
 
     @Override
@@ -70,9 +72,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         else return 0;
     }
 
-    public void setFilms(List<SearchResultModel> films){
+    public void setFilms(List<Movie> films){
         mMovies = films;
         notifyDataSetChanged();
+    }
+
+    public void deleteMovie(Movie movie){
+        mMovies.remove(movie);
     }
 
 
@@ -95,10 +101,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     class FavClick implements View.OnClickListener{
 
         int count;
-        SearchResultModel movie;
+        Movie movie;
         ImageButton button;
 
-        FavClick(SearchResultModel movie, ImageButton button){
+        FavClick(Movie movie, ImageButton button){
             this.movie = movie;
             this.button = button;
         }

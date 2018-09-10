@@ -39,7 +39,6 @@ public class MovieRepository {
     private MovieDetailsDao detailsDao;
     private Application application;
     public MoviesAPI api;
-    private FavDao favDao;
 
     private static MovieRepository INSTANCE;
 
@@ -47,7 +46,6 @@ public class MovieRepository {
         application = application1;
         MoviewRoomDatabase db = MoviewRoomDatabase.getInstance(application);
         dao = db.filmDao();
-        favDao = db.favDao();
         detailsDao = db.detailsDao();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MovieRepository.BASE_SEARCH_URL)
@@ -83,35 +81,23 @@ public class MovieRepository {
     public Observable<SearchModel> searchByApi(String query){
         return api.getSearchResult(API_KEY, query);
     }
-    public Observable<List<SearchResultModel>> getTrendingDay(){
-        return dao.getTrending()
-                .flattenAsObservable(movies -> movies)
-                .map(item-> convertToSearchModel(item))
-                .toList()
-                .toObservable();
+    public Observable<List<Movie>> getTrendingDay(){
+        return dao.getTrending().toObservable();
 
     }
 
-    public Observable<List<SearchResultModel>> getFavorites(){
-        return dao.getTrending()
-                .flattenAsObservable(movies -> movies)
-                .map(item-> convertToSearchModel(item))
-                .toList()
-                .toObservable();
+//    public Observable<List<SearchResultModel>> getTrendingDay(){
+//        return dao.getTrending()
+//                .flattenAsObservable(movies -> movies)
+//                .map(item-> Converters.convertToSearchModel(item))
+//                .toList()
+//                .toObservable();
+//
+//    }
 
-    }
+    public Observable<List<Movie>> getFavorites(){
+        return dao.getFavorites().toObservable();
 
-    public SearchResultModel convertToSearchModel(Movie movie){
-        SearchResultModel mModel = new SearchResultModel();
-        mModel.setTitle(movie.getTitle());
-        mModel.setReleaseDate(movie.getReleaseDate());
-        mModel.setVoteAverage(movie.getRatingAvg());
-        mModel.setPosterPath(movie.getPosterPath());
-        mModel.setId(movie.getId());
-        return mModel;
-    }
-
-    public void insertData(List<SearchResultModel> searchList){
     }
 
     public boolean wmJob() {
@@ -160,38 +146,7 @@ public class MovieRepository {
 
     public Single<MovieDetails> getMovieFromNetwork(int id){
         return api.getMovie(id, API_KEY)
-                .map(item-> convertToMovieDetails(item));
-    }
-
-    public MovieDetails convertToMovieDetails(GetDetailsMovieModel model){
-        MovieDetails movieDetails = new MovieDetails();
-        movieDetails.setReleaseDate(model.getReleaseDate());
-        movieDetails.setId(model.getId());
-        movieDetails.setOverview(model.getOverview());
-        movieDetails.setPosterPath(model.getPosterPath());
-        movieDetails.setRatingAvg(model.getVoteAverage());
-        movieDetails.setRevenue(model.getRevenue());
-        movieDetails.setTitle(model.getTitle());
-        movieDetails.setRuntime(model.getRuntime());
-        model.setStatus(model.getStatus());
-
-        ArrayList<String> genreNames = new ArrayList<>();
-        for(int i = 0; i < model.getGenres().size(); i++){
-            genreNames.add(model.getGenres().get(i).getName());
-        }
-
-        ArrayList<String> countryNames = new ArrayList<>();
-        for(int i = 0; i < model.getProductionCountries().size(); i++){
-            countryNames.add(model.getProductionCountries().get(i).getName());
-        }
-        movieDetails.setCountries(countryNames);
-        movieDetails.setGenres(genreNames);
-
-        return movieDetails;
-    }
-
-    public Single<List<FavModel>> getFavMovies(){
-        return favDao.getFavMovies();
+                .map(item-> Converters.convertToMovieDetails(item));
     }
 
     public void insertMovie(Movie movie){

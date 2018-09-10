@@ -6,13 +6,17 @@ import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class MovieViewModel extends AndroidViewModel{
@@ -27,12 +31,12 @@ public class MovieViewModel extends AndroidViewModel{
         return mRepository.searchByApi(query);
     }
 
-    public Observable<List<SearchResultModel>> getTrendingDay(){
+    public Observable<List<Movie>> getTrendingDay(){
         return mRepository.getTrendingDay();
     }
 
-    public Observable<List<SearchResultModel>> getFavorites(){
-        return mRepository.getTrendingDay();
+    public Observable<List<Movie>> getFavorites(){
+        return mRepository.getFavorites();
     }
 
     public void startRequestFromDailyTrending(){
@@ -47,7 +51,11 @@ public class MovieViewModel extends AndroidViewModel{
         return mRepository.getMovieFromNetwork(id);
     }
 
-    public Single<List<FavModel>> getFavMovies(){
-        return mRepository.getFavMovies();
+    public void insertMovie(Movie movie){
+        mRepository.insertMovie(movie);
+    }
+
+    public void updateMovie(Movie movie){
+        mRepository.updateMovie(movie);
     }
 }

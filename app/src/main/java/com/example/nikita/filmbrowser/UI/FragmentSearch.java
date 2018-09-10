@@ -18,6 +18,7 @@ import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,28 +43,28 @@ public class FragmentSearch extends BaseListFragment{
 
         searchButton.setOnClickListener(view1 -> {
             Utils.hideKeyboardFrom(getActivity(), editText);
-            disposable = mMovieViewModel.searchFilm(editText.getText().toString())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<SearchModel>() {
-                        @Override
-                        public void onNext(SearchModel searchModel) {
-                            if(searchModel.getResults().size()!=0) {
-                                mAdapter.setFilms(searchModel.getResults());
-                            }else{
-                                Toast.makeText(getActivity(),R.string.not_found, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+//            disposable = mMovieViewModel.searchFilm(editText.getText().toString())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeWith(new DisposableObserver<SearchModel>() {
+//                        @Override
+//                        public void onNext(SearchModel searchModel) {
+//                            if(searchModel.getResults().size()!=0) {
+//                                mAdapter.setFilms(Converters.convertToMovie(searchModel.getResults()));
+//                            }else{
+//                                Toast.makeText(getActivity(),R.string.not_found, Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//
+//                        @Override
+//                        public void onComplete() {
+//
+//                        }
+//                    });
         });
 
         return view;
@@ -80,12 +81,12 @@ public class FragmentSearch extends BaseListFragment{
     }
 
     @Override
-    public void addedToFav(SearchResultModel model) {
-        super.addedToFav(model);
+    public void addedToFav(Movie movie) {
+        super.addedToFav(movie);
     }
 
     @Override
-    public void deleteFromFav(SearchResultModel model) {
-        super.deleteFromFav(model);
+    public void deleteFromFav(Movie movie) {
+        super.deleteFromFav(movie);
     }
 }

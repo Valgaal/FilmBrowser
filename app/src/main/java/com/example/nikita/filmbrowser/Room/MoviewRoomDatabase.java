@@ -6,12 +6,11 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-@Database(entities = {Movie.class, MovieDetails.class, FavModel.class}, version = 1)
+@Database(entities = {Movie.class, MovieDetails.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class MoviewRoomDatabase extends RoomDatabase {
     public abstract MovieDao filmDao();
     public abstract MovieDetailsDao detailsDao();
-    public abstract FavDao favDao();
 
     private static MoviewRoomDatabase INSTANCE;
 
