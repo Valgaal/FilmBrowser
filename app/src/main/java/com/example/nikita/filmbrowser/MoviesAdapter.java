@@ -51,7 +51,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         if(movie.getPosterPath()!= null) {
             Picasso.get()
                     .load(MovieRepository.IMAGE_PATH.concat(movie.getPosterPath()))
-                    .resize(200,200)
+                    .resize(150,150)
                     .centerInside()
                     .into(moviesViewHolder.poster);
         }
