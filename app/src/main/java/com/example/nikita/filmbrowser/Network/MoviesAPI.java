@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.Network;
 
 import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
 import com.example.nikita.filmbrowser.Models.SearchModel;

@@ -1,14 +1,11 @@
-package com.example.nikita.filmbrowser.Navigation;
+package com.example.nikita.filmbrowser.UI;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,32 +14,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 
 import java.util.List;
 import java.util.UUID;
 
 import androidx.work.WorkManager;
-import androidx.work.WorkStatus;
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 
-public class FragmentTrending extends Fragment implements MoviesAdapter.OnViewClicked {
+public class FragmentTrending extends BaseListFragment{
 
-    private Disposable disposable;
     private MovieViewModel mMovieViewModel;
     private MoviesAdapter mAdapter;
     private SwipeRefreshLayout mSwipe;
@@ -74,14 +61,6 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.OnViewCl
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(disposable != null) {
-            disposable.dispose();
-        }
-    }
-
     public void updateScreen(){
         disposable = mMovieViewModel.getTrendingDay()
                 .subscribeOn(Schedulers.io())
@@ -109,13 +88,21 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.OnViewCl
 
     @Override
     public void filmSelected(int id) {
-        Intent intent = new Intent(getActivity(), DetailsActivity.class);
-        intent.putExtra(FragmentDetails.ID,id);
-        startActivity(intent);
+        super.filmSelected(id);
     }
 
     @Override
-    public void addedToFav(int id) {
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
+    @Override
+    public void addedToFav(SearchResultModel model) {
+        super.addedToFav(model);
+    }
+
+    @Override
+    public void deleteFromFav(SearchResultModel model) {
+        super.deleteFromFav(model);
     }
 }

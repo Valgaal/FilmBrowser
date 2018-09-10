@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Navigation;
+package com.example.nikita.filmbrowser.UI;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -8,9 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.example.nikita.filmbrowser.Navigation.FragmentFavorites;
-import com.example.nikita.filmbrowser.Navigation.FragmentSearch;
-import com.example.nikita.filmbrowser.Navigation.FragmentTrending;
 import com.example.nikita.filmbrowser.R;
 
 

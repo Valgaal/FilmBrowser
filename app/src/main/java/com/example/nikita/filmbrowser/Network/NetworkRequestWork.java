@@ -1,8 +1,9 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.Network;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.nikita.filmbrowser.App;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.Room.Movie;

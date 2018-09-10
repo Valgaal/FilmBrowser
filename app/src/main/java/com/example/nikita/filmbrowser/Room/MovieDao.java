@@ -22,4 +22,10 @@ public interface MovieDao {
     @Query("SELECT * FROM film_information WHERE trending = 1")
     Single<List<Movie>> getTrending();
 
+    @Query("SELECT * FROM film_information WHERE id = :id")
+    Single<Movie> getMovieById(int id);
+
+    @Query("SELECT * FROM film_information WHERE Favorites = 1")
+    Single<Movie> getFavorites();
+
 }

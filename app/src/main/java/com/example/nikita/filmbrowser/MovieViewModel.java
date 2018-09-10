@@ -4,11 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.Room.FavModel;
-import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 
@@ -34,6 +31,10 @@ public class MovieViewModel extends AndroidViewModel{
         return mRepository.getTrendingDay();
     }
 
+    public Observable<List<SearchResultModel>> getFavorites(){
+        return mRepository.getTrendingDay();
+    }
+
     public void startRequestFromDailyTrending(){
         mRepository.getTrendingDailyWM();
     }
@@ -46,7 +47,7 @@ public class MovieViewModel extends AndroidViewModel{
         return mRepository.getMovieFromNetwork(id);
     }
 
-    public Single<FavModel> getFavMovies(){
+    public Single<List<FavModel>> getFavMovies(){
         return mRepository.getFavMovies();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Navigation;
+package com.example.nikita.filmbrowser.UI;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;

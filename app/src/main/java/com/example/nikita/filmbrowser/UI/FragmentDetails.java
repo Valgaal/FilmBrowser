@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Navigation;
+package com.example.nikita.filmbrowser.UI;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -12,19 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
-import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.squareup.picasso.Picasso;
 
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 

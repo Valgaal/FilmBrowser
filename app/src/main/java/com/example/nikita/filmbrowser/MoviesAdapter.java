@@ -26,7 +26,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     public interface OnViewClicked{
         void filmSelected(int id);
-        void addedToFav(int id);
+        void addedToFav(SearchResultModel id);
+        void deleteFromFav(SearchResultModel id);
     }
 
     public MoviesAdapter(Context context, Fragment fragment) {
@@ -59,10 +60,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .into(moviesViewHolder.poster);
         }
         moviesViewHolder.itemView.setOnClickListener(view -> mCallback.filmSelected(movie.getId()));
-        moviesViewHolder.favButton.setOnClickListener(view -> {
-            mCallback.addedToFav(movie.getId());
-            moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.star_big_on));
-        });
+        moviesViewHolder.favButton.setOnClickListener(new FavClick(movie, moviesViewHolder.favButton));
     }
 
     @Override
@@ -91,6 +89,31 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             title = itemView.findViewById(R.id.titleText);
             ratingAvg = itemView.findViewById(R.id.rating);
             favButton = itemView.findViewById(R.id.favoritesButton);
+        }
+    }
+
+    class FavClick implements View.OnClickListener{
+
+        int count;
+        SearchResultModel movie;
+        ImageButton button;
+
+        FavClick(SearchResultModel movie, ImageButton button){
+            this.movie = movie;
+            this.button = button;
+        }
+
+        @Override
+        public void onClick(View view) {
+            count++;
+            if(count %2 ==0){ //not pressed
+                mCallback.deleteFromFav(movie);
+                button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+            }else{ //pressed
+                mCallback.addedToFav(movie);
+                button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+            }
+
         }
     }
 }

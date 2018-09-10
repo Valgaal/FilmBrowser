@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 
 import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.MoviesAPI;
+import com.example.nikita.filmbrowser.Network.MoviesAPI;
 import com.example.nikita.filmbrowser.Models.SearchModel;
-import com.example.nikita.filmbrowser.NetworkRequestWork;
+import com.example.nikita.filmbrowser.Network.NetworkRequestWork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,11 @@ import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -94,6 +92,15 @@ public class MovieRepository {
 
     }
 
+    public Observable<List<SearchResultModel>> getFavorites(){
+        return dao.getTrending()
+                .flattenAsObservable(movies -> movies)
+                .map(item-> convertToSearchModel(item))
+                .toList()
+                .toObservable();
+
+    }
+
     public SearchResultModel convertToSearchModel(Movie movie){
         SearchResultModel mModel = new SearchResultModel();
         mModel.setTitle(movie.getTitle());
@@ -124,7 +131,22 @@ public class MovieRepository {
             movie.setRatingAvg(resultModel.getVoteAverage());
             movie.setReleaseDate(resultModel.convertReleaseDate());
             movie.setTrending(true);
-            dao.insert(movie);
+            dao.getMovieById(movie.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableSingleObserver<Movie>() {
+                        @Override
+                        public void onSuccess(Movie mov) {
+                            movie.setFavorites(mov.isFavorites());
+                            updateMovie(movie);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            insertMovie(movie);
+                        }
+                    });
+
         }
         return true;
     }
@@ -168,8 +190,22 @@ public class MovieRepository {
         return movieDetails;
     }
 
-    public Single<FavModel> getFavMovies(){
+    public Single<List<FavModel>> getFavMovies(){
         return favDao.getFavMovies();
+    }
+
+    public void insertMovie(Movie movie){
+        Completable.fromAction(() -> dao.insert(movie))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    public void updateMovie(Movie movie){
+        Completable.fromAction(() -> dao.update(movie))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
 }

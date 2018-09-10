@@ -1,10 +1,9 @@
-package com.example.nikita.filmbrowser.Navigation;
+package com.example.nikita.filmbrowser.UI;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,18 +14,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Utils.Utils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-public class FragmentSearch extends Fragment implements MoviesAdapter.OnViewClicked {
+public class FragmentSearch extends BaseListFragment{
 
     private MovieViewModel mMovieViewModel;
-    private Disposable disposable;
     private MoviesAdapter mAdapter;
 
     @Nullable
@@ -41,51 +40,52 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.OnViewClic
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
 
-        searchButton.setOnClickListener(view1 ->
-
-                disposable = mMovieViewModel.searchFilm(editText.getText().toString())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<SearchModel>() {
-                    @Override
-                    public void onNext(SearchModel searchModel) {
+        searchButton.setOnClickListener(view1 -> {
+            Utils.hideKeyboardFrom(getActivity(), editText);
+            disposable = mMovieViewModel.searchFilm(editText.getText().toString())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableObserver<SearchModel>() {
+                        @Override
+                        public void onNext(SearchModel searchModel) {
                             if(searchModel.getResults().size()!=0) {
                                 mAdapter.setFilms(searchModel.getResults());
                             }else{
                                 Toast.makeText(getActivity(),R.string.not_found, Toast.LENGTH_SHORT).show();
                             }
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-                    }
-                }
-        ));
-
+                        }
+                    });
+        });
 
         return view;
     }
 
     @Override
+    public void filmSelected(int id) {
+        super.filmSelected(id);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(disposable != null) {
-            disposable.dispose();
-        }
     }
 
     @Override
-    public void filmSelected(int id) {
-            Toast.makeText(getActivity(),"Film Details", Toast.LENGTH_SHORT).show();
+    public void addedToFav(SearchResultModel model) {
+        super.addedToFav(model);
     }
 
     @Override
-    public void addedToFav(int id) {
-            Toast.makeText(getActivity(),"Favorites", Toast.LENGTH_SHORT).show();
+    public void deleteFromFav(SearchResultModel model) {
+        super.deleteFromFav(model);
     }
 }

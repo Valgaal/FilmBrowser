@@ -3,6 +3,7 @@ package com.example.nikita.filmbrowser.Room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Query;
 
 @Entity(tableName = "film_information")
 public class Movie {
@@ -28,19 +29,11 @@ public class Movie {
     @ColumnInfo(name = "ReleaseDate")
     private String releaseDate;
 
-    @ColumnInfo(name = "Favorites")
-    private boolean favorites;
-
     @ColumnInfo(name = "Trending")
     private boolean trending;
 
-    public boolean isTrending() {
-        return trending;
-    }
-
-    public void setTrending(boolean trending) {
-        this.trending = trending;
-    }
+    @ColumnInfo(name = "Favorites")
+    private boolean favorites;
 
     public boolean isFavorites() {
         return favorites;
@@ -48,6 +41,14 @@ public class Movie {
 
     public void setFavorites(boolean favorites) {
         this.favorites = favorites;
+    }
+
+    public boolean isTrending() {
+        return trending;
+    }
+
+    public void setTrending(boolean trending) {
+        this.trending = trending;
     }
 
     public int getId() {
