@@ -24,6 +24,7 @@ import com.example.nikita.filmbrowser.Room.MovieRepository;
 import java.util.List;
 import java.util.UUID;
 
+import androidx.work.State;
 import androidx.work.WorkManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -54,7 +55,13 @@ public class FragmentTrending extends BaseListFragment{
             WorkManager.getInstance().getStatusById(UUID.fromString(id))
                     .observe(this, workStatus -> {
                         if(workStatus != null && workStatus.getState().isFinished()) {
-                            updateScreen();
+                            if(workStatus.getState().equals(State.FAILED)){
+                                Toast.makeText(getActivity(), "No Internet", Toast.LENGTH_LONG).show();
+                                mSwipe.setEnabled(false);
+                            }else{
+                                updateScreen();
+                            }
+
                         }
                     });
         });
@@ -101,13 +108,11 @@ public class FragmentTrending extends BaseListFragment{
     public void addedToFav(Movie movie) {
         movie.setFavorites(true);
         mMovieViewModel.updateMovie(movie);
-        super.addedToFav(movie);
     }
 
     @Override
     public void deleteFromFav(Movie movie) {
         movie.setFavorites(false);
         mMovieViewModel.updateMovie(movie);
-        super.deleteFromFav(movie);
     }
 }

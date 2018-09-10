@@ -79,6 +79,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     public void deleteMovie(Movie movie){
         mMovies.remove(movie);
+        notifyDataSetChanged();
     }
 
 

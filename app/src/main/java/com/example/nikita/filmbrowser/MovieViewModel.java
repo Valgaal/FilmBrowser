@@ -27,7 +27,7 @@ public class MovieViewModel extends AndroidViewModel{
         mRepository = ((App) application).getRepository();
     }
 
-    public Observable<SearchModel> searchFilm(String query){
+    public Observable<List<Movie>> searchFilm(String query){
         return mRepository.searchByApi(query);
     }
 

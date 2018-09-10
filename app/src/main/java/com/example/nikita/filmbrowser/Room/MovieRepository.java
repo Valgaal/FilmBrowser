@@ -21,6 +21,8 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -78,8 +80,15 @@ public class MovieRepository {
         editor.commit();
     }
 
-    public Observable<SearchModel> searchByApi(String query){
-        return api.getSearchResult(API_KEY, query);
+    public Observable<List<Movie>> searchByApi(String query){
+        return api.getSearchResult(API_KEY, query)
+                .map(searchModel -> searchModel.getResults())
+                .flatMap(searchResultModels ->
+                            Observable.fromIterable(searchResultModels)
+                            .map(item -> Converters.convertToMovie(item))
+                )
+                .toList()
+                .toObservable() ;
     }
     public Observable<List<Movie>> getTrendingDay(){
         return dao.getTrending().toObservable();
@@ -132,7 +141,6 @@ public class MovieRepository {
                             insertMovie(movie);
                         }
                     });
-
         }
         return true;
     }

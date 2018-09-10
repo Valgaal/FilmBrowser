@@ -63,10 +63,10 @@ public class Converters {
 
     public static Movie convertToMovie(SearchResultModel resultModel){
         Movie movie = new Movie();
-        if(movie.getTitle() == null){
+        if(resultModel.getTitle() == null){
             movie.setTitle(resultModel.getName());
         }else{
-            movie.setTitle(resultModel.getName());
+            movie.setTitle(resultModel.getTitle());
         }
         movie.setPosterPath(resultModel.getPosterPath());
         movie.setId(resultModel.getId());

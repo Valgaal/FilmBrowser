@@ -75,7 +75,6 @@ public class FragmentFavorites extends BaseListFragment{
         movie.setFavorites(false);
         mMovieViewModel.updateMovie(movie);
         mAdapter.deleteMovie(movie);
-        super.deleteFromFav(movie);
     }
 
     @Override
@@ -83,7 +82,6 @@ public class FragmentFavorites extends BaseListFragment{
         movie.setFavorites(true);
         mMovieViewModel.updateMovie(movie);
         mAdapter.notifyDataSetChanged();
-        super.addedToFav(movie);
     }
 
 }

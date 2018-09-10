@@ -10,6 +10,7 @@ import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieDao;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.example.nikita.filmbrowser.Room.MoviewRoomDatabase;
+import com.example.nikita.filmbrowser.Utils.Utils;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import androidx.work.Worker;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -32,7 +34,8 @@ public class NetworkRequestWork extends Worker {
     public Result doWork() {
         MovieRepository repository = ((App) getApplicationContext()).getRepository();
 
-        if(repository.wmJob()){
+        if(Utils.isOnline()){
+            repository.wmJob();
             return Result.SUCCESS;
         }else{
             return  Result.FAILURE;

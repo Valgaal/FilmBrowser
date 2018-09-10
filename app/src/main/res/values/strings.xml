@@ -14,4 +14,5 @@
     <string name="revenue">Revenue:</string>
     <string name="status">Status:</string>
     <string name="movie_details">Movie details</string>
+    <string name="minutes">min.</string>
 </resources>
