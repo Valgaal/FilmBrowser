@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI;
+package com.example.nikita.filmbrowser.UI.Details;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 
 public class DetailsActivity extends AppCompatActivity {
 

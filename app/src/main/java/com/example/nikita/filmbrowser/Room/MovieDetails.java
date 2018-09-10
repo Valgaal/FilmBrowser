@@ -39,8 +39,8 @@ public class MovieDetails {
     @ColumnInfo(name = "Runtime")
     private int runtime;
 
-    @ColumnInfo(name = "Status")
-    private String status;
+    @ColumnInfo(name = "Popularity")
+    private double popularity;
 
     public ArrayList<String> getGenres() {
         return genres;
@@ -66,12 +66,13 @@ public class MovieDetails {
         this.runtime = runtime;
     }
 
-    public String getStatus() {
-        return status;
+
+    public double getPopularity() {
+        return popularity;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 
     public int getId() {

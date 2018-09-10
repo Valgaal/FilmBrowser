@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.UI;
 
 import android.app.Application;
 

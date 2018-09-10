@@ -162,23 +162,23 @@
         app:layout_constraintTop_toBottomOf="@+id/runtime" />
 
     <TextView
-        android:id="@+id/statustextView"
+        android:id="@+id/popularityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/status"
+        android:text="@string/popularity"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/revenueTextView" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/popularity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/statustextView"
+        app:layout_constraintStart_toEndOf="@+id/popularityTextView"
         app:layout_constraintTop_toBottomOf="@+id/revenue" />
 
     <TextView

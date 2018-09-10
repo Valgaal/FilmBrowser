@@ -10,6 +10,8 @@ import com.example.nikita.filmbrowser.Network.MoviesAPI;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Network.NetworkRequestWork;
 
+import org.reactivestreams.Publisher;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,9 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -37,10 +41,10 @@ public class MovieRepository {
     public final static String MY_PREF = "my_pref";
     public final static String WORK_REQUEST_ID = "work_id";
 
-    public MovieDao dao;
+    private MovieDao dao;
     private MovieDetailsDao detailsDao;
     private Application application;
-    public MoviesAPI api;
+    private MoviesAPI api;
 
     private static MovieRepository INSTANCE;
 
@@ -69,10 +73,8 @@ public class MovieRepository {
     }
 
     public void getTrendingDailyWM(){
-        Constraints constraints = new Constraints.Builder().setRequiredNetworkType
-                (NetworkType.CONNECTED).build();
         OneTimeWorkRequest trendingRequest = new OneTimeWorkRequest.Builder(NetworkRequestWork.class)
-                .setConstraints(constraints).build();
+                .build();
         WorkManager.getInstance().enqueue(trendingRequest);
         SharedPreferences sp = application.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -85,7 +87,16 @@ public class MovieRepository {
                 .map(searchModel -> searchModel.getResults())
                 .flatMap(searchResultModels ->
                             Observable.fromIterable(searchResultModels)
-                            .map(item -> Converters.convertToMovie(item))
+                            .map(item -> {
+                                try {
+                                    Movie movie = dao.getMovieById(item.getId()).blockingGet();
+                                    Movie converted = Converters.convertToMovie(item);
+                                    converted.setFavorites(movie.isFavorites());
+                                    return converted;
+                                }catch (Exception e){
+                                    return Converters.convertToMovie(item);
+                                }
+                            })
                 )
                 .toList()
                 .toObservable() ;
@@ -109,7 +120,7 @@ public class MovieRepository {
 
     }
 
-    public boolean wmJob() {
+    public void wmJob() {
 
         SearchModel searchModel = api.getTrendingDay(API_KEY).blockingSingle();
         List<SearchResultModel> searchList = searchModel.getResults();
@@ -126,30 +137,25 @@ public class MovieRepository {
             movie.setRatingAvg(resultModel.getVoteAverage());
             movie.setReleaseDate(resultModel.convertReleaseDate());
             movie.setTrending(true);
-            dao.getMovieById(movie.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSingleObserver<Movie>() {
-                        @Override
-                        public void onSuccess(Movie mov) {
-                            movie.setFavorites(mov.isFavorites());
-                            updateMovie(movie);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            insertMovie(movie);
-                        }
-                    });
+            try {
+                Movie movieFromDb = dao.getMovieById(movie.getId()).blockingGet();
+                movie.setFavorites(movieFromDb.isFavorites());
+                updateMovie(movie);
+            }catch (Exception e){
+                insertMovie(movie);
+            }
         }
-        return true;
     }
 
-    public Single<MovieDetails> getMovie(int id){
-//        return Single.concat(detailsDao.getMovie(id), getMovieFromNetwork(id))
-//                .firstElement()
-//                .toSingle();
-        return getMovieFromNetwork(id);
+    public Observable<MovieDetails> getMovie(int id){
+        return Observable.concat(
+                detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {
+                    return Observable.empty();
+                }),
+                getMovieFromNetwork(id).toObservable().onErrorResumeNext(throwable -> {
+            return Observable.empty();
+        })
+        );
     }
 
     public Single<MovieDetails> getMovieFromNetwork(int id){
@@ -166,6 +172,13 @@ public class MovieRepository {
 
     public void updateMovie(Movie movie){
         Completable.fromAction(() -> dao.update(movie))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    public void insertMovieDetails(MovieDetails movieDetails){
+        Completable.fromAction(() -> detailsDao.insert(movieDetails))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();

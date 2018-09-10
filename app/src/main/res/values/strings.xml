@@ -12,7 +12,7 @@
     <string name="country">Country:</string>
     <string name="runtime">Runtime:</string>
     <string name="revenue">Revenue:</string>
-    <string name="status">Status:</string>
+    <string name="popularity">Popularity:</string>
     <string name="movie_details">Movie details</string>
     <string name="minutes">min.</string>
 </resources>

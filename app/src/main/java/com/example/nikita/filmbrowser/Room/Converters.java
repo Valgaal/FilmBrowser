@@ -47,6 +47,8 @@ public class Converters {
         }
         movieDetails.setCountries(countryNames);
         movieDetails.setGenres(genreNames);
+        movieDetails.setPopularity(model.getPopularity());
+
 
         return movieDetails;
     }

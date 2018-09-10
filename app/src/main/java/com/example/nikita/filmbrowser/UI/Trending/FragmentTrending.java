@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI;
+package com.example.nikita.filmbrowser.UI.Trending;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -14,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.UI.BaseListFragment;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,9 +29,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class FragmentTrending extends BaseListFragment{
+public class FragmentTrending extends BaseListFragment {
 
-    private MovieViewModel mMovieViewModel;
+    private TrendingViewModel mViewModel;
     private MoviesAdapter mAdapter;
     private SwipeRefreshLayout mSwipe;
 
@@ -41,7 +40,7 @@ public class FragmentTrending extends BaseListFragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
         mSwipe = view.findViewById(R.id.swipe_refresh);
-        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(TrendingViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw_trending);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
@@ -49,7 +48,7 @@ public class FragmentTrending extends BaseListFragment{
         updateScreen();
 
         mSwipe.setOnRefreshListener(() -> {
-            mMovieViewModel.startRequestFromDailyTrending();
+            mViewModel.startRequestFromDailyTrending();
             SharedPreferences sp = getActivity().getSharedPreferences(MovieRepository.MY_PREF, Context.MODE_PRIVATE);
             final String id = sp.getString(MovieRepository.WORK_REQUEST_ID,"");
             WorkManager.getInstance().getStatusById(UUID.fromString(id))
@@ -57,7 +56,7 @@ public class FragmentTrending extends BaseListFragment{
                         if(workStatus != null && workStatus.getState().isFinished()) {
                             if(workStatus.getState().equals(State.FAILED)){
                                 Toast.makeText(getActivity(), "No Internet", Toast.LENGTH_LONG).show();
-                                mSwipe.setEnabled(false);
+                                mSwipe.setRefreshing(false);
                             }else{
                                 updateScreen();
                             }
@@ -70,7 +69,7 @@ public class FragmentTrending extends BaseListFragment{
     }
 
     public void updateScreen(){
-        disposable = mMovieViewModel.getTrendingDay()
+        disposable = mViewModel.getTrendingDay()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Movie>>() {
@@ -106,13 +105,11 @@ public class FragmentTrending extends BaseListFragment{
 
     @Override
     public void addedToFav(Movie movie) {
-        movie.setFavorites(true);
-        mMovieViewModel.updateMovie(movie);
+        mViewModel.updateMovie(movie);
     }
 
     @Override
     public void deleteFromFav(Movie movie) {
-        movie.setFavorites(false);
-        mMovieViewModel.updateMovie(movie);
+        mViewModel.updateMovie(movie);
     }
 }

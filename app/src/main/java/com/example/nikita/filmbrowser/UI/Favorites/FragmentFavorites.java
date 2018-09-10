@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI;
+package com.example.nikita.filmbrowser.UI.Favorites;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.UI.BaseListFragment;
 
 import java.util.List;
 
@@ -23,21 +22,21 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class FragmentFavorites extends BaseListFragment{
-    private MovieViewModel mMovieViewModel;
+public class FragmentFavorites extends BaseListFragment {
+    private FavoritesViewModel mViewModel;
     private MoviesAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
-        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
 
-        disposable = mMovieViewModel.getFavorites()
+        disposable = mViewModel.getFavorites()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Movie>>() {
@@ -72,15 +71,13 @@ public class FragmentFavorites extends BaseListFragment{
 
     @Override
     public void addedToFav(Movie movie) {
-        movie.setFavorites(false);
-        mMovieViewModel.updateMovie(movie);
+        mViewModel.updateMovie(movie);
         mAdapter.deleteMovie(movie);
     }
 
     @Override
     public void deleteFromFav(Movie movie) {
-        movie.setFavorites(true);
-        mMovieViewModel.updateMovie(movie);
+        mViewModel.updateMovie(movie);
         mAdapter.notifyDataSetChanged();
     }
 

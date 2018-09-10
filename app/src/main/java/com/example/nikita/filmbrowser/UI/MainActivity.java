@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.UI.Favorites.FragmentFavorites;
+import com.example.nikita.filmbrowser.UI.Search.FragmentSearch;
+import com.example.nikita.filmbrowser.UI.Trending.FragmentTrending;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayShowTitleEnabled(false);//отключает app title
         if(savedInstanceState == null){
             selectItem(0);
         }

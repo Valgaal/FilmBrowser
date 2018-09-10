@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.squareup.picasso.Picasso;
@@ -94,14 +93,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             super(itemView);
             poster = itemView.findViewById(R.id.poster);
             title = itemView.findViewById(R.id.titleText);
-            ratingAvg = itemView.findViewById(R.id.rating);
+            ratingAvg = itemView.findViewById(R.id.popularity);
             favButton = itemView.findViewById(R.id.favoritesButton);
         }
     }
 
     class FavClick implements View.OnClickListener{
 
-        int count;
         Movie movie;
         ImageButton button;
 
@@ -112,15 +110,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         @Override
         public void onClick(View view) {
-            count++;
-            if(count %2 ==0){ //not pressed
-                mCallback.deleteFromFav(movie);
+            if(movie.isFavorites()){
+                movie.setFavorites(false);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
-            }else{ //pressed
-                mCallback.addedToFav(movie);
+                mCallback.deleteFromFav(movie);
+            }else{
+                movie.setFavorites(true);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                mCallback.addedToFav(movie);
             }
-
         }
     }
 }

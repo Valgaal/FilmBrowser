@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.UI.Details.DetailsActivity;
+import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 
 import io.reactivex.disposables.Disposable;
 

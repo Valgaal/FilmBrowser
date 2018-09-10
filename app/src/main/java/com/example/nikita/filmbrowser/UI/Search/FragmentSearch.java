@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI;
+package com.example.nikita.filmbrowser.UI.Search;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,12 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.SearchModel;
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.MovieViewModel;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
 import java.util.List;
@@ -26,16 +24,16 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 
-public class FragmentSearch extends BaseListFragment{
+public class FragmentSearch extends BaseListFragment {
 
-    private MovieViewModel mMovieViewModel;
+    private SearchViewModel mViewModel;
     private MoviesAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        mMovieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         Button searchButton = view.findViewById(R.id.searchButton);
         EditText editText = view.findViewById(R.id.searchEditText);
         RecyclerView rw = view.findViewById(R.id.rw);
@@ -45,7 +43,7 @@ public class FragmentSearch extends BaseListFragment{
 
         searchButton.setOnClickListener(view1 -> {
             Utils.hideKeyboardFrom(getActivity(), editText);
-            disposable = mMovieViewModel.searchFilm(editText.getText().toString())
+            disposable = mViewModel.searchFilm(editText.getText().toString())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableObserver<List<Movie>>() {
                         @Override
@@ -84,13 +82,11 @@ public class FragmentSearch extends BaseListFragment{
 
     @Override
     public void addedToFav(Movie movie) {
-        movie.setFavorites(true);
-        mMovieViewModel.insertMovie(movie);
+        mViewModel.insertMovie(movie);
     }
 
     @Override
     public void deleteFromFav(Movie movie) {
-        movie.setFavorites(false);
-        mMovieViewModel.updateMovie(movie);
+        mViewModel.updateMovie(movie);
     }
 }
