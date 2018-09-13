@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -22,9 +23,9 @@ public class DetailsActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle(getResources().getString(R.string.movie_details));
 
-        int id = getIntent().getExtras().getInt(FragmentDetails.ID);
+        MovieDetails movieDetails =((MovieDetails)  getIntent().getExtras().getSerializable(FragmentDetails.MOVIE_DETAILS));
 
-        FragmentDetails fragment = FragmentDetails.newInstance(id);
+        FragmentDetails fragment = FragmentDetails.newInstance(movieDetails);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit();
     }

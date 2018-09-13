@@ -55,7 +55,7 @@ public class FragmentTrending extends BaseListFragment {
                     .observe(this, workStatus -> {
                         if(workStatus != null && workStatus.getState().isFinished()) {
                             if(workStatus.getState().equals(State.FAILED)){
-                                Toast.makeText(getActivity(), "No Internet", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
                                 mSwipe.setRefreshing(false);
                             }else{
                                 updateScreen();

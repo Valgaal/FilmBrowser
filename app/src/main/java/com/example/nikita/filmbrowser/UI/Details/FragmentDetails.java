@@ -13,8 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -22,16 +25,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FragmentDetails  extends Fragment{
 
-    private Disposable disposable;
-    private DetailsViewModel mViewModel;
+    public static final String MOVIE_DETAILS = "movie";
 
-    public static final String ID = "id";
-
-    public static FragmentDetails newInstance(int id) {
+    public static FragmentDetails newInstance(MovieDetails movieDetails) {
         FragmentDetails myFragment = new FragmentDetails();
 
         Bundle args = new Bundle();
-        args.putInt(ID, id);
+        args.putSerializable(MOVIE_DETAILS, movieDetails);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -41,7 +41,6 @@ public class FragmentDetails  extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-        mViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
         TextView title = view.findViewById(R.id.title);
         TextView date = view.findViewById(R.id.date);
         TextView genres = view.findViewById(R.id.genres);
@@ -51,57 +50,49 @@ public class FragmentDetails  extends Fragment{
         TextView popularity = view.findViewById(R.id.popularity);
         TextView overview = view.findViewById(R.id.overview);
         ImageView image = view.findViewById(R.id.posterBig);
+
         Bundle bundle = this.getArguments();
-        int id = bundle.getInt(ID);
+        MovieDetails movieDetails = (MovieDetails) bundle.getSerializable(MOVIE_DETAILS);
 
-        disposable = mViewModel.getMovie(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(movieDetails -> {
-                    mViewModel.insertMovieDetails(movieDetails);
-                    title.setText(movieDetails.getTitle());
-                    date.setText(movieDetails.getReleaseDate());
-                    String genreString = "";
-                    for(int i = 0; i< movieDetails.getGenres().size(); i++){
-                        if(i + 1 == movieDetails.getGenres().size()){
-                            genreString = genreString.concat(movieDetails.getGenres().get(i));
-                        }
-                        else{
-                            genreString = genreString.concat(movieDetails.getGenres().get(i).concat("\n"));
-                        }
-                    }
-                    genres.setText(genreString);
-
-                    String countryString = "";
-                    for(int i = 0; i< movieDetails.getCountries().size(); i++){
-                        if(i + 1 == movieDetails.getCountries().size()){
-                            countryString = countryString.concat(movieDetails.getCountries().get(i));
-                        }
-                        else {
-                            countryString = countryString.concat(movieDetails.getCountries().get(i).concat("\n"));
-                        }
-                    }
-
-                    country.setText(countryString);
-                    runtime.setText(Integer.toString(movieDetails.getRuntime()));
-                    revenue.setText(Integer.toString(movieDetails.getRevenue()));
-                    popularity.setText(Double.toString(movieDetails.getPopularity()));
-                    Picasso.get()
-                            .load(MovieRepository.IMAGE_PATH.concat(movieDetails.getPosterPath()))
-                            .resize(400,400)
-                            .centerInside()
-                            .into(image);
-                    overview.setText(movieDetails.getOverview());
-                }, throwable -> Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_LONG).show());
+        title.setText(movieDetails.getTitle());
+        date.setText(movieDetails.getReleaseDate());
+        genres.setText(getStringFromList(movieDetails.getGenres()));
+        country.setText(getStringFromList(movieDetails.getCountries()));
+        runtime.setText(Integer.toString(movieDetails.getRuntime()));
+        if(movieDetails.getRevenue() == 0){
+            revenue.setVisibility(View.GONE);
+            view.findViewById(R.id.revenueTextView).setVisibility(View.GONE);
+        }else{
+            revenue.setText(Integer.toString(movieDetails.getRevenue()).concat(" $"));
+        }
+        popularity.setText(Double.toString(movieDetails.getPopularity()));
+        overview.setText(movieDetails.getOverview());
+        if(movieDetails.getPosterPath()!=null) {
+            Picasso.get()
+                    .load(MovieRepository.IMAGE_PATH.concat(movieDetails.getPosterPath()))
+                    .resize(400, 400)
+                    .centerInside()
+                    .into(image);
+        }
 
         return view;
     }
 
+    private String getStringFromList(List<String> genres){
+        String genreString = "";
+        for(int i = 0; i< genres.size(); i++){
+            if(i + 1 == genres.size()){
+                genreString = genreString.concat(genres.get(i));
+            }
+            else{
+                genreString = genreString.concat(genres.get(i).concat("\n"));
+            }
+        }
+        return genreString;
+    }
+
     @Override
     public void onDestroyView() {
-        if(disposable != null) {
-            disposable.dispose();
-        }
         super.onDestroyView();
     }
 }

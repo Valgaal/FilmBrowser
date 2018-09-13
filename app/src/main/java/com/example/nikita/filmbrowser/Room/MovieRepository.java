@@ -88,7 +88,7 @@ public class MovieRepository {
                 .flatMap(searchResultModels ->
                             Observable.fromIterable(searchResultModels)
                             .map(item -> {
-                                try {
+                                try {//эта проверка на случай того, если уже есть фильм, то тогда нужно узнать в избранном он или нет и обновить его
                                     Movie movie = dao.getMovieById(item.getId()).blockingGet();
                                     Movie converted = Converters.convertToMovie(item);
                                     converted.setFavorites(movie.isFavorites());
@@ -148,14 +148,19 @@ public class MovieRepository {
     }
 
     public Observable<MovieDetails> getMovie(int id){
-        return Observable.concat(
-                detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {
-                    return Observable.empty();
-                }),
-                getMovieFromNetwork(id).toObservable().onErrorResumeNext(throwable -> {
-            return Observable.empty();
-        })
-        );
+//        return Observable.concat(
+//                detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {
+//                    return Observable.error(throwable);
+//                }),
+//                getMovieFromNetwork(id).toObservable().onErrorResumeNext(throwable -> {
+//            return Observable.error(throwable);
+//        })
+//        );
+        return detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {
+                    return getMovieFromNetwork(id).toObservable().onErrorResumeNext(networkThrowable -> {
+                        return Observable.error(networkThrowable);
+                    });
+                });
     }
 
     public Single<MovieDetails> getMovieFromNetwork(int id){
