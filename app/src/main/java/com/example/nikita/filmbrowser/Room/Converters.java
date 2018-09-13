@@ -53,16 +53,6 @@ public class Converters {
         return movieDetails;
     }
 
-    public static SearchResultModel convertToSearchModel(Movie movie){
-        SearchResultModel mModel = new SearchResultModel();
-        mModel.setTitle(movie.getTitle());
-        mModel.setReleaseDate(movie.getReleaseDate());
-        mModel.setVoteAverage(movie.getRatingAvg());
-        mModel.setPosterPath(movie.getPosterPath());
-        mModel.setId(movie.getId());
-        return mModel;
-    }
-
     public static Movie convertToMovie(SearchResultModel resultModel){
         Movie movie = new Movie();
         if(resultModel.getTitle() == null){

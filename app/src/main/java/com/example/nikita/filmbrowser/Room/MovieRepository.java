@@ -4,30 +4,19 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.Network.MoviesAPI;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Network.NetworkRequestWork;
 
-import org.reactivestreams.Publisher;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -126,16 +115,7 @@ public class MovieRepository {
         List<SearchResultModel> searchList = searchModel.getResults();
         for (int i = 0; i < searchList.size(); i++) {
             SearchResultModel resultModel = searchList.get(i);
-            Movie movie = new Movie();
-            if (resultModel.getTitle() == null) {
-                movie.setTitle(resultModel.getName());
-            } else {
-                movie.setTitle(resultModel.getTitle());
-            }
-            movie.setId(resultModel.getId());
-            movie.setPosterPath(resultModel.getPosterPath());
-            movie.setRatingAvg(resultModel.getVoteAverage());
-            movie.setReleaseDate(resultModel.convertReleaseDate());
+            Movie movie = Converters.convertToMovie(resultModel);
             movie.setTrending(true);
             try {
                 Movie movieFromDb = dao.getMovieById(movie.getId()).blockingGet();
@@ -156,14 +136,14 @@ public class MovieRepository {
 //            return Observable.error(throwable);
 //        })
 //        );
-        return detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {
+        return detailsDao.getMovie(id).toObservable().onErrorResumeNext(throwable -> {//если нет в дб, то делает запрос
                     return getMovieFromNetwork(id).toObservable().onErrorResumeNext(networkThrowable -> {
                         return Observable.error(networkThrowable);
                     });
                 });
     }
 
-    public Single<MovieDetails> getMovieFromNetwork(int id){
+    private Single<MovieDetails> getMovieFromNetwork(int id){
         return api.getMovie(id, API_KEY)
                 .map(item-> Converters.convertToMovieDetails(item));
     }
