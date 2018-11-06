@@ -8,14 +8,17 @@ import com.example.nikita.filmbrowser.Room.MovieDetails;
 import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.example.nikita.filmbrowser.UI.App;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 public class DetailsViewModel extends AndroidViewModel {
-    private MovieRepository mRepository;
+    @Inject
+    MovieRepository mRepository;
 
     public DetailsViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ((App) application).getRepository();
+        App.getComponent().inject(this);
     }
 
     public Observable<MovieDetails> getMovie(int id){

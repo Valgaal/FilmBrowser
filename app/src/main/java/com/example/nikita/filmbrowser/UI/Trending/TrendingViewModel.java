@@ -11,14 +11,17 @@ import com.example.nikita.filmbrowser.UI.App;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 public class TrendingViewModel extends AndroidViewModel {
-    private MovieRepository mRepository;
+    @Inject
+    MovieRepository mRepository;
 
     public TrendingViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ((App) application).getRepository();
+        App.getComponent().inject(this);
     }
 
     public Observable<List<Movie>> getTrendingDay(){

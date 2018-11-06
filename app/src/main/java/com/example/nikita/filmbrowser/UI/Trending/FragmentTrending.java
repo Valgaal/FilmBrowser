@@ -51,7 +51,7 @@ public class FragmentTrending extends BaseListFragment {
             mViewModel.startRequestFromDailyTrending();
             SharedPreferences sp = getActivity().getSharedPreferences(MovieRepository.MY_PREF, Context.MODE_PRIVATE);
             final String id = sp.getString(MovieRepository.WORK_REQUEST_ID,"");
-            WorkManager.getInstance().getStatusById(UUID.fromString(id))
+            WorkManager.getInstance().getStatusByIdLiveData(UUID.fromString(id))
                     .observe(this, workStatus -> {
                         if(workStatus != null && workStatus.getState().isFinished()) {
                             if(workStatus.getState().equals(State.FAILED)){

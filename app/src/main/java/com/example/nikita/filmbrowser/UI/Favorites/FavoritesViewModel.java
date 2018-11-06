@@ -10,14 +10,17 @@ import com.example.nikita.filmbrowser.UI.App;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 public class FavoritesViewModel extends AndroidViewModel {
-    private MovieRepository mRepository;
+    @Inject
+    MovieRepository mRepository;
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ((App) application).getRepository();
+        App.getComponent().inject(this);
     }
 
     public Observable<List<Movie>> getFavorites(){

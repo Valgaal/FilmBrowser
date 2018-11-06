@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieRepository {
 
-    public static final String BASE_SEARCH_URL = "https://api.themoviedb.org/3/";
+    private static final String BASE_SEARCH_URL = "https://api.themoviedb.org/3/";
     private final static String API_KEY = "655780709d6f3360d269a64bd96c99d6";
     public final static String IMAGE_PATH = "https://image.tmdb.org/t/p/w500";
     public final static String MY_PREF = "my_pref";
@@ -35,9 +35,7 @@ public class MovieRepository {
     private Application application;
     private MoviesAPI api;
 
-    private static MovieRepository INSTANCE;
-
-    private MovieRepository(final Application application1){
+    public MovieRepository(final Application application1){
         application = application1;
         MoviewRoomDatabase db = MoviewRoomDatabase.getInstance(application);
         dao = db.filmDao();
@@ -48,17 +46,6 @@ public class MovieRepository {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         api = retrofit.create(MoviesAPI.class);
-    }
-
-    public static MovieRepository getInstance(final Application application){
-        if(INSTANCE == null){
-            synchronized (MovieRepository.class){
-                if(INSTANCE == null){
-                    INSTANCE = new MovieRepository(application);
-                }
-            }
-        }
-        return INSTANCE;
     }
 
     public void getTrendingDailyWM(){

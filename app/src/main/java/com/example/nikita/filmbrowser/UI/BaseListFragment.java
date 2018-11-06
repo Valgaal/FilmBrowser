@@ -14,11 +14,9 @@ import android.widget.Toast;
 import com.example.nikita.filmbrowser.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Room.Movie;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
 import com.example.nikita.filmbrowser.UI.Details.DetailsActivity;
 import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
 import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
-import com.squareup.picasso.Picasso;
 
 import java.net.UnknownHostException;
 

@@ -19,6 +19,7 @@ import com.example.nikita.filmbrowser.Room.Movie;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
+import java.net.UnknownHostException;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -57,7 +58,11 @@ public class FragmentSearch extends BaseListFragment {
 
                         @Override
                         public void onError(Throwable e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            if(e instanceof UnknownHostException){
+                                Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
+                            }else {
+                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
 
                         @Override
