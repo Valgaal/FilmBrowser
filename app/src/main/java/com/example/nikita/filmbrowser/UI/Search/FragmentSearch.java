@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.MoviesAdapter;
+import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.Utils.Utils;
 

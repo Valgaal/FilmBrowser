@@ -8,8 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.MovieDetails;
-import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
+import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
 
 public class DetailsActivity extends AppCompatActivity {
 

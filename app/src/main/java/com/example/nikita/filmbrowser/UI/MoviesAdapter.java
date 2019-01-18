@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser;
+package com.example.nikita.filmbrowser.UI;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,8 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nikita.filmbrowser.Room.Movie;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
+import com.example.nikita.filmbrowser.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

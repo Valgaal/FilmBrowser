@@ -1,6 +1,6 @@
 package com.example.nikita.filmbrowser.Di;
 
-import com.example.nikita.filmbrowser.Network.NetworkRequestWork;
+import com.example.nikita.filmbrowser.Model.Network.NetworkRequestWork;
 import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
 import com.example.nikita.filmbrowser.UI.Favorites.FavoritesViewModel;
 import com.example.nikita.filmbrowser.UI.Search.SearchViewModel;

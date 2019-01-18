@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.example.nikita.filmbrowser.Room.MovieDetails;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.example.nikita.filmbrowser.UI.App;
 
 import javax.inject.Inject;

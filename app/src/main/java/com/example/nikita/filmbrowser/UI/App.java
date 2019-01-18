@@ -5,7 +5,6 @@ import android.app.Application;
 import com.example.nikita.filmbrowser.Di.AppComponent;
 import com.example.nikita.filmbrowser.Di.DaggerAppComponent;
 import com.example.nikita.filmbrowser.Di.RepositoryModule;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
 
 public class App extends Application {
     private static AppComponent component;

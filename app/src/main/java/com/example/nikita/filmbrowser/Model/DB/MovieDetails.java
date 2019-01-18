@@ -1,12 +1,14 @@
-package com.example.nikita.filmbrowser.Room;
+package com.example.nikita.filmbrowser.Model.DB;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Query;
 
-@Entity(tableName = "film_information")
-public class Movie {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+@Entity(tableName = "film_details_information")
+public class MovieDetails implements Serializable{
 
     @PrimaryKey
     private int id;
@@ -17,9 +19,6 @@ public class Movie {
     @ColumnInfo(name = "PosterPath")
     private String posterPath;
 
-    @ColumnInfo(name = "Description")
-    private String description;
-
     @ColumnInfo(name = "Overview")
     private String overview;
 
@@ -29,26 +28,52 @@ public class Movie {
     @ColumnInfo(name = "ReleaseDate")
     private String releaseDate;
 
-    @ColumnInfo(name = "Trending")
-    private boolean trending;
+    @ColumnInfo(name = "Revenue")
+    private int revenue;
 
-    @ColumnInfo(name = "Favorites")
-    private boolean favorites;
+    @ColumnInfo(name = "Genres")
+    private ArrayList<String> genres;
 
-    public boolean isFavorites() {
-        return favorites;
+    @ColumnInfo(name = "Country")
+    private ArrayList<String> countries;
+
+    @ColumnInfo(name = "Runtime")
+    private int runtime;
+
+    @ColumnInfo(name = "Popularity")
+    private double popularity;
+
+    public ArrayList<String> getGenres() {
+        return genres;
     }
 
-    public void setFavorites(boolean favorites) {
-        this.favorites = favorites;
+    public void setGenres(ArrayList<String> genres) {
+        this.genres = genres;
     }
 
-    public boolean isTrending() {
-        return trending;
+    public ArrayList<String> getCountries() {
+        return countries;
     }
 
-    public void setTrending(boolean trending) {
-        this.trending = trending;
+    public void setCountries(ArrayList<String> countries) {
+        this.countries = countries;
+    }
+
+    public int getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;
+    }
+
+
+    public double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 
     public int getId() {
@@ -75,14 +100,6 @@ public class Movie {
         this.posterPath = posterPath;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getOverview() {
         return overview;
     }
@@ -105,5 +122,13 @@ public class Movie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public int getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
     }
 }

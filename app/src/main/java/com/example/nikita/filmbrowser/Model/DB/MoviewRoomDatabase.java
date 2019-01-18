@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Room;
+package com.example.nikita.filmbrowser.Model.DB;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

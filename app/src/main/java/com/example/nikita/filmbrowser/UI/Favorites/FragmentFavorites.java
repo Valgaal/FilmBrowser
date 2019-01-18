@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.MoviesAdapter;
+import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.Movie;
+import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
 
 import java.util.List;

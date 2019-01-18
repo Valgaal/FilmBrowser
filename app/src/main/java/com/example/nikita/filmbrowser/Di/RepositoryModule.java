@@ -3,7 +3,7 @@ package com.example.nikita.filmbrowser.Di;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 
 import javax.inject.Singleton;
 

@@ -1,10 +1,10 @@
-package com.example.nikita.filmbrowser.Network;
+package com.example.nikita.filmbrowser.Model.Network;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.UI.App;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
 import javax.inject.Inject;

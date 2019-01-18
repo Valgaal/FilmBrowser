@@ -1,6 +1,5 @@
 package com.example.nikita.filmbrowser.UI.Details;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,18 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.MovieDetails;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class FragmentDetails  extends Fragment{
 
