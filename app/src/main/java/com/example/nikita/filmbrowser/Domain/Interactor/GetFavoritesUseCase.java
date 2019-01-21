@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public class GetFavoritesUseCase extends BaseMoviesUseCase {
 
-    public Observable<List<Movie>> getFavorites(){
+    public Observable<List<Movie>> getFavorites() {
         return movieRepository.getFavorites().toObservable();
 
     }

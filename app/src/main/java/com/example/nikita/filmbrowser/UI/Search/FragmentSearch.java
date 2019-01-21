@@ -1,5 +1,6 @@
 package com.example.nikita.filmbrowser.UI.Search;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,38 +42,23 @@ public class FragmentSearch extends BaseListFragment {
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
-
         searchButton.setOnClickListener(view1 -> {
-            Utils.hideKeyboardFrom(getActivity(), editText);
-            disposable = mViewModel.searchFilm(editText.getText().toString())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<List<Movie>>() {
-                        @Override
-                        public void onNext(List<Movie> movies) {
-                            if(movies.size()!=0) {
-                                mAdapter.setFilms(movies);
-                            }else{
-                                Toast.makeText(getActivity(),R.string.not_found, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            if(e instanceof UnknownHostException){
-                                Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
-                            }else {
-                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+            Utils.hideKeyboardFrom(getActivity(),view1);
+            mViewModel.searchTriggered(editText.getText().toString());
         });
-
+        mViewModel.stateLiveData.observe(this, this::displayState);
         return view;
+    }
+
+    private void displayState(SearchViewState searchViewState){
+        switch (searchViewState.status){
+            case SUCCESS:
+                mAdapter.setFilms(searchViewState.data);
+                break;
+            case ERROR:
+                Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

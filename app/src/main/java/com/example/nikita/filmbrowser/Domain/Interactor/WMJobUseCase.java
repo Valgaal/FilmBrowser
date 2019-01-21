@@ -10,18 +10,18 @@ import java.util.List;
 public class WMJobUseCase extends BaseMoviesUseCase {
 
     public void wmJob() {
-        SearchModel searchModel = api.getTrendingDay(API_KEY).blockingSingle();
+        SearchModel searchModel = movieRepository.getTrendingDaily().blockingSingle();
         List<SearchResultModel> searchList = searchModel.getResults();
         for (int i = 0; i < searchList.size(); i++) {
             SearchResultModel resultModel = searchList.get(i);
             Movie movie = Converters.convertToMovie(resultModel);
             movie.setTrending(true);
             try {
-                Movie movieFromDb = dao.getMovieById(movie.getId()).blockingGet();
+                Movie movieFromDb = movieRepository.getMovieById(movie.getId()).blockingGet();
                 movie.setFavorites(movieFromDb.isFavorites());
-                updateMovie(movie);
-            }catch (Exception e){
-                insertMovie(movie);
+                movieRepository.updateMovie(movie);
+            } catch (Exception e) {
+                movieRepository.insertMovie(movie);
             }
         }
     }

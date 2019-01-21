@@ -2,6 +2,7 @@ package com.example.nikita.filmbrowser.Domain;
 
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
+import com.example.nikita.filmbrowser.Models.SearchModel;
 
 import java.util.List;
 
@@ -10,17 +11,21 @@ import io.reactivex.Single;
 
 public interface IMovieRepository {
 
-    void getTrendingDailyWM();
+    void saveWMRequestId(String id);
 
-    Observable<List<Movie>> searchByApi(String query);
+    Observable<SearchModel> searchByApi(String query);
+
+    Observable<SearchModel> getTrendingDaily();
+
+    Single<MovieDetails> getMovieFromNetwork(int id);
 
     Single<List<Movie>> getTrendingDay();
 
     Single<List<Movie>> getFavorites();
 
-    void wmJob();
+    Single<Movie> getMovieById(int id);
 
-    Observable<MovieDetails> getMovie(int id);
+    Single<MovieDetails> getMovie(int id);
 
     void insertMovie(Movie movie);
 

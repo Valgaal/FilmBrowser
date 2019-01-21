@@ -29,7 +29,7 @@ public class TrendingViewModel extends AndroidViewModel {
     }
 
     public void startRequestFromDailyTrending(){
-        mRepository.getTrendingDailyWM();
+        mRepository.saveWMRequestId();
     }
 
     public void updateMovie(Movie movie){

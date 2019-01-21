@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class UpdateMovieDetailsUseCase extends BaseMoviesUseCase {
 
-    public void updateMovie(Movie movie){
+    public void updateMovie(Movie movie) {
         Completable.fromAction(() -> movieRepository.updateMovie(movie))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
