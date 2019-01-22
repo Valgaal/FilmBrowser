@@ -1,17 +1,25 @@
-package com.example.nikita.filmbrowser.Domain.Interactor;
+package com.example.nikita.filmbrowser.Domain.Interactors.Search;
 
+import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.SearchModel;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 
-public class SearchMovieUseCase extends BaseMoviesUseCase {
+class SearchMovieUseCase{
 
-    public Observable<List<Movie>> searchByApi(String query) {
+    private IMovieRepository movieRepository;
+
+    SearchMovieUseCase(IMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
+
+    Observable<List<Movie>> searchByApi(String query) {
         return movieRepository.searchByApi(query)
-                .map(searchModel -> searchModel.getResults())
+                .map(SearchModel::getResults)
                 .flatMap(searchResultModels ->
                         Observable.fromIterable(searchResultModels)
                                 .map(item -> {

@@ -5,66 +5,54 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.example.nikita.filmbrowser.Domain.Interactor.GetTrendingDayUseCase;
-import com.example.nikita.filmbrowser.Domain.Interactor.InitWMUseCase;
-import com.example.nikita.filmbrowser.Domain.Interactor.UpdateMovieDetailsUseCase;
+import com.example.nikita.filmbrowser.Domain.Interactors.Trending.TrendingInteractor;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
-import com.example.nikita.filmbrowser.UI.App;
 import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
 
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class TrendingViewModel extends AndroidViewModel {
 
     MutableLiveData<SearchViewState> stateLiveData = new MutableLiveData<>();
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private TrendingInteractor trendingInteractor;
 
     public TrendingViewModel(@NonNull Application application) {
         super(application);
+        trendingInteractor = new TrendingInteractor();
     }
 
-    public void getTrendingDay() {
-        new GetTrendingDayUseCase().getTrendingDay()
+    @Override
+    protected void onCleared() {
+        disposable.clear();
+    }
+
+    void getTrendingDay() {
+        disposable.add(trendingInteractor.getTrendingDaily()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<List<Movie>>() {
-
-                    @Override
-                    public void onNext(List<Movie> searchModel) {
-                        stateLiveData.setValue(SearchViewState.success(searchModel));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        stateLiveData.setValue(SearchViewState.error(e.getMessage()));
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribe(
+                        movies -> stateLiveData.setValue(SearchViewState.success(movies)),
+                        throwable -> stateLiveData.setValue(SearchViewState.error(throwable.getMessage()))
+                ));
     }
 
-    public void startRequestFromDailyTrending() {
-        new InitWMUseCase().initWMUseCase();
+    void startRequestFromDailyTrending() {
+        trendingInteractor.startRequestFromDailyTrending();
     }
 
-    public UUID getWMId() {
-        return new InitWMUseCase().getWMId();
+    UUID getWMId() {
+        return trendingInteractor.getWMId();
     }
 
-    public void updateMovie(Movie movie) {
-        new UpdateMovieDetailsUseCase().updateMovie(movie);
+    void updateMovie(Movie movie) {
+        trendingInteractor.updateMovie(movie);
     }
 
 }

@@ -1,10 +1,9 @@
 package com.example.nikita.filmbrowser.Di;
 
-import com.example.nikita.filmbrowser.Model.Network.NetworkRequestWork;
-import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
-import com.example.nikita.filmbrowser.UI.Favorites.FavoritesViewModel;
-import com.example.nikita.filmbrowser.UI.Search.SearchViewModel;
-import com.example.nikita.filmbrowser.UI.Trending.TrendingViewModel;
+import com.example.nikita.filmbrowser.Domain.Interactors.Details.DetailsInteractor;
+import com.example.nikita.filmbrowser.Domain.Interactors.Favorites.FavoritesInteractor;
+import com.example.nikita.filmbrowser.Domain.Interactors.Search.SearchInteractor;
+import com.example.nikita.filmbrowser.Domain.Interactors.Trending.TrendingInteractor;
 
 import javax.inject.Singleton;
 
@@ -13,9 +12,8 @@ import dagger.Component;
 @Component(modules = {RepositoryModule.class})
 @Singleton
 public interface AppComponent {
-    void inject(NetworkRequestWork work);
-    void inject(DetailsViewModel viewModel);
-    void inject(FavoritesViewModel viewModel);
-    void inject(TrendingViewModel viewModel);
-    void inject(SearchViewModel viewModel);
+    void inject(TrendingInteractor trendingInteractor);
+    void inject(DetailsInteractor viewModel);
+    void inject(FavoritesInteractor viewModel);
+    void inject(SearchInteractor viewModel);
 }

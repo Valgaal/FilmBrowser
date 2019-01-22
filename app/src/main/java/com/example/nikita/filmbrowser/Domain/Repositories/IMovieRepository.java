@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Domain;
+package com.example.nikita.filmbrowser.Domain.Repositories;
 
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;

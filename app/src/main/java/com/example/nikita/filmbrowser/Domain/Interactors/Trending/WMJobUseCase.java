@@ -1,5 +1,6 @@
-package com.example.nikita.filmbrowser.Domain.Interactor;
+package com.example.nikita.filmbrowser.Domain.Interactors.Trending;
 
+import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Models.SearchModel;
@@ -7,9 +8,15 @@ import com.example.nikita.filmbrowser.Models.SearchResultModel;
 
 import java.util.List;
 
-public class WMJobUseCase extends BaseMoviesUseCase {
+class WMJobUseCase{
 
-    public void wmJob() {
+    private IMovieRepository movieRepository;
+
+    WMJobUseCase(IMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
+
+    void wmJob() {
         SearchModel searchModel = movieRepository.getTrendingDaily().blockingSingle();
         List<SearchResultModel> searchList = searchModel.getResults();
         for (int i = 0; i < searchList.size(); i++) {

@@ -1,11 +1,10 @@
 package com.example.nikita.filmbrowser.UI.Trending;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,20 +16,12 @@ import android.widget.Toast;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
-import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
-
-import java.util.List;
-import java.util.UUID;
 
 import androidx.work.State;
 import androidx.work.WorkManager;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
-public class FragmentTrending extends BaseListFragment {
+public class FragmentTrending extends Fragment implements MoviesAdapter.FavoritesChooser {
 
     private TrendingViewModel mViewModel;
     private MoviesAdapter mAdapter;
@@ -75,11 +66,6 @@ public class FragmentTrending extends BaseListFragment {
                 mSwipe.setRefreshing(false);
                 break;
         }
-    }
-
-    @Override
-    public void filmSelected(int id) {
-        super.filmSelected(id);
     }
 
     @Override

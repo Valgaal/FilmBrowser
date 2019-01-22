@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,10 +17,9 @@ import android.widget.Toast;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
-public class FragmentSearch extends BaseListFragment {
+public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesChooser{
 
     private SearchViewModel mViewModel;
     private MoviesAdapter mAdapter;
@@ -52,11 +52,6 @@ public class FragmentSearch extends BaseListFragment {
                 Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_SHORT).show();
                 break;
         }
-    }
-
-    @Override
-    public void filmSelected(int id) {
-        super.filmSelected(id);
     }
 
     @Override

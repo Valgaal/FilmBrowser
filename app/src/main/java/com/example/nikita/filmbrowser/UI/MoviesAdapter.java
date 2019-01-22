@@ -22,18 +22,22 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     private List<Movie> mMovies;
     private Context context;
-    private OnViewClicked mCallback;
+    private FilmSelector filmSelector;
+    private FavoritesChooser favoritesChooser;
     private final LayoutInflater mInflater;
 
-    public interface OnViewClicked{
+    public interface FilmSelector{
         void filmSelected(int id);
+    }
+    public interface FavoritesChooser{
         void addedToFav(Movie movie);
         void deleteFromFav(Movie movie);
     }
 
     public MoviesAdapter(Context context, Fragment fragment) {
         mInflater = LayoutInflater.from(context);
-        this.mCallback = (OnViewClicked) fragment;
+        if(fragment instanceof FilmSelector) this.filmSelector = (FilmSelector) fragment;
+        if(fragment instanceof FavoritesChooser)this.favoritesChooser =(FavoritesChooser) fragment;
         this.context = context;
 }
 
@@ -56,7 +60,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .centerInside()
                     .into(moviesViewHolder.poster);
         }
-        moviesViewHolder.itemView.setOnClickListener(view -> mCallback.filmSelected(movie.getId()));
+        moviesViewHolder.itemView.setOnClickListener(view -> filmSelector.filmSelected(movie.getId()));
         moviesViewHolder.favButton.setOnClickListener(new FavClick(movie, moviesViewHolder.favButton));
         if(movie.isFavorites()){
             moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
@@ -90,7 +94,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         private final TextView ratingAvg;
         private final ImageButton favButton;
 
-        public MoviesViewHolder(@NonNull View itemView) {
+        MoviesViewHolder(@NonNull View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.poster);
             title = itemView.findViewById(R.id.titleText);
@@ -114,11 +118,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             if(movie.isFavorites()){
                 movie.setFavorites(false);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
-                mCallback.deleteFromFav(movie);
+                favoritesChooser.deleteFromFav(movie);
             }else{
                 movie.setFavorites(true);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
-                mCallback.addedToFav(movie);
+                favoritesChooser.addedToFav(movie);
             }
         }
     }

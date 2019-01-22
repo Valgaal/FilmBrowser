@@ -1,5 +1,7 @@
 package com.example.nikita.filmbrowser.UI;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -7,14 +9,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.UI.Details.DetailsActivity;
+import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
+import com.example.nikita.filmbrowser.UI.Details.DetailsViewState;
+import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 import com.example.nikita.filmbrowser.UI.Favorites.FragmentFavorites;
 import com.example.nikita.filmbrowser.UI.Search.FragmentSearch;
 import com.example.nikita.filmbrowser.UI.Trending.FragmentTrending;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.FilmSelector {
 
     private Toolbar toolbar;
 
@@ -72,6 +79,26 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(getResources().getString(R.string.title_daily_trending));
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    public void filmSelected(int id) {
+        DetailsViewModel detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+        detailsViewModel.getMovie(id);
+        detailsViewModel.stateLiveData.observe(this, this::displayState);
+    }
+
+    private void displayState(DetailsViewState detailsViewState) {
+        switch (detailsViewState.status) {
+            case SUCCESS:
+                Intent intent = new Intent(this, DetailsActivity.class);
+                intent.putExtra(FragmentDetails.MOVIE_DETAILS, detailsViewState.data);
+                startActivity(intent);
+                break;
+            case ERROR:
+                Toast.makeText(this, detailsViewState.error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
 }

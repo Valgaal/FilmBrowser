@@ -1,5 +1,6 @@
-package com.example.nikita.filmbrowser.Domain.Interactor;
+package com.example.nikita.filmbrowser.Domain.Interactors.Details;
 
+import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
 import com.example.nikita.filmbrowser.UI.Details.ConvertedMovieDetails;
 
@@ -8,7 +9,13 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public class GetMovieUseCase extends BaseMoviesUseCase {
+class GetMovieUseCase{
+
+    private IMovieRepository movieRepository;
+
+    GetMovieUseCase(IMovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     public Observable<ConvertedMovieDetails> getMovie(int id) {
         return movieRepository.getMovie(id).onErrorResumeNext(throwable -> {//если нет в дб, то делает запрос

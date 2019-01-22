@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.nikita.filmbrowser.Domain.IMovieRepository;
+import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.DB.MovieDao;
