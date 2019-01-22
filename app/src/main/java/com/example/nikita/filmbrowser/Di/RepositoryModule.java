@@ -3,6 +3,7 @@ package com.example.nikita.filmbrowser.Di;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 
 import javax.inject.Singleton;
@@ -22,7 +23,7 @@ public class RepositoryModule {
     @Provides
     @NonNull
     @Singleton
-    public MovieRepository provideMovieRepository(){
+    public IMovieRepository provideIMovieRepository(){
         return new MovieRepository(application);
     }
 }

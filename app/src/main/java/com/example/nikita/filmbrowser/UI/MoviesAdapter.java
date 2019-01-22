@@ -34,11 +34,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         void deleteFromFav(Movie movie);
     }
 
-    public MoviesAdapter(Context context, Fragment fragment) {
-        mInflater = LayoutInflater.from(context);
-        if(fragment instanceof FilmSelector) this.filmSelector = (FilmSelector) fragment;
-        if(fragment instanceof FavoritesChooser)this.favoritesChooser =(FavoritesChooser) fragment;
-        this.context = context;
+    public MoviesAdapter(MainActivity mainActivity, FavoritesChooser favoritesChooser) {
+        mInflater = LayoutInflater.from(mainActivity);
+        this.filmSelector = mainActivity;
+        this.favoritesChooser = favoritesChooser;
+        this.context = mainActivity;
 }
 
     @NonNull

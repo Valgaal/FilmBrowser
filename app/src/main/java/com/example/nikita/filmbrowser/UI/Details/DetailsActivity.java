@@ -22,7 +22,7 @@ public class DetailsActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle(getResources().getString(R.string.movie_details));
 
-        MovieDetails movieDetails = ((MovieDetails) getIntent().getExtras().getSerializable(FragmentDetails.MOVIE_DETAILS));
+        ConvertedMovieDetails movieDetails = ((ConvertedMovieDetails) getIntent().getExtras().getSerializable(FragmentDetails.MOVIE_DETAILS));
 
         FragmentDetails fragment = FragmentDetails.newInstance(movieDetails);
         FragmentManager fragmentManager = getSupportFragmentManager();

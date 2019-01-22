@@ -39,7 +39,9 @@ public class TrendingViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         movies -> stateLiveData.setValue(SearchViewState.success(movies)),
-                        throwable -> stateLiveData.setValue(SearchViewState.error(throwable.getMessage()))
+                        throwable -> {
+                            stateLiveData.setValue(SearchViewState.error(throwable.getMessage()));
+                        }
                 ));
     }
 

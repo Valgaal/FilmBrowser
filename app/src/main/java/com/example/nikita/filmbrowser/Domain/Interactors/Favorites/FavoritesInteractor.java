@@ -3,6 +3,7 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Favorites;
 import com.example.nikita.filmbrowser.Domain.Interactors.UpdateMovieDetailsUseCase;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.UI.App;
 
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class FavoritesInteractor {
 
     @Inject
     public IMovieRepository movieRepository;
+
+    public FavoritesInteractor() {
+        App.getComponent().inject(this);
+    }
 
     public Observable<List<Movie>> getFavorites() {
         return new GetFavoritesUseCase(movieRepository).getFavorites();

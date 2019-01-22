@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nikita.filmbrowser.UI.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
@@ -33,7 +34,7 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesC
         EditText editText = view.findViewById(R.id.searchEditText);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MoviesAdapter(getActivity(), this);
+        mAdapter = new MoviesAdapter((MainActivity) getActivity(), this);
         rw.setAdapter(mAdapter);
         searchButton.setOnClickListener(view1 -> {
             Utils.hideKeyboardFrom(getActivity(), view1);

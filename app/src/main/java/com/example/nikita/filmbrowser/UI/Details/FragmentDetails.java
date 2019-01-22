@@ -18,7 +18,7 @@ public class FragmentDetails extends Fragment {
 
     public static final String MOVIE_DETAILS = "movie";
 
-    public static FragmentDetails newInstance(MovieDetails movieDetails) {
+    public static FragmentDetails newInstance(ConvertedMovieDetails movieDetails) {
         FragmentDetails myFragment = new FragmentDetails();
 
         Bundle args = new Bundle();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.nikita.filmbrowser.UI.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
@@ -35,7 +36,7 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
         mViewModel = ViewModelProviders.of(this).get(TrendingViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw_trending);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MoviesAdapter(getActivity(), this);
+        mAdapter = new MoviesAdapter((MainActivity) getActivity(), this);
         rw.setAdapter(mAdapter);
         mViewModel.getTrendingDay();
         mViewModel.stateLiveData.observe(this, this::updateScreen);
@@ -43,14 +44,14 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
         mSwipe.setOnRefreshListener(() -> {
             mViewModel.startRequestFromDailyTrending();
         });
-        WorkManager.getInstance().getStatusByIdLiveData(mViewModel.getWMId())
-                .observe(this, workStatus -> {
-                    if (workStatus != null && workStatus.getState().isFinished()) {
-                        if (workStatus.getState().equals(State.FAILED)) {
-                            mViewModel.stateLiveData.setValue(SearchViewState.error(getResources().getString(R.string.internet_error)));
-                        }
-                    }
-                });
+//        WorkManager.getInstance().getStatusByIdLiveData(mViewModel.getWMId())
+//                .observe(this, workStatus -> {
+//                    if (workStatus != null && workStatus.getState().isFinished()) {
+//                        if (workStatus.getState().equals(State.FAILED)) {
+//                            mViewModel.stateLiveData.setValue(SearchViewState.error(getResources().getString(R.string.internet_error)));
+//                        }
+//                    }
+//                });
 
         return view;
     }

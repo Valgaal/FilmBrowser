@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.nikita.filmbrowser.UI.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
@@ -28,7 +29,7 @@ public class FragmentFavorites extends Fragment implements MoviesAdapter.Favorit
         mViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MoviesAdapter(getActivity(), this);
+        mAdapter = new MoviesAdapter((MainActivity) getActivity(), this);
         rw.setAdapter(mAdapter);
         mViewModel.stateLiveData.observe(this, this::displayState);
         mViewModel.getFavorites();
