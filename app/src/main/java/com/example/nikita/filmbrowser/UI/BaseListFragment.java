@@ -11,29 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.UI.Details.DetailsActivity;
 import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
+import com.example.nikita.filmbrowser.UI.Details.DetailsViewState;
 import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 
-import java.net.UnknownHostException;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-public class BaseListFragment  extends Fragment implements MoviesAdapter.OnViewClicked{
-    protected Disposable disposable;
-
-    @Override
-    public void onDestroyView() {
-        if(disposable != null) {
-            disposable.dispose();
-        }
-        super.onDestroyView();
-
-    }
+public class BaseListFragment extends Fragment implements MoviesAdapter.OnViewClicked {
 
     @Nullable
     @Override
@@ -44,22 +28,21 @@ public class BaseListFragment  extends Fragment implements MoviesAdapter.OnViewC
     @Override
     public void filmSelected(int id) {
         DetailsViewModel detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
-        disposable = detailsViewModel.getMovie(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(movieDetails -> {
-                    detailsViewModel.insertMovieDetails(movieDetails);
-                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                    intent.putExtra(FragmentDetails.MOVIE_DETAILS, movieDetails);
-                    startActivity(intent);
-                }, throwable -> {
-                    if(throwable instanceof UnknownHostException){
-                        Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+        detailsViewModel.getMovie(id);
+        detailsViewModel.stateLiveData.observe(this, this::displayState);
+    }
 
-                });
+    private void displayState(DetailsViewState detailsViewState) {
+        switch (detailsViewState.status) {
+            case SUCCESS:
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                intent.putExtra(FragmentDetails.MOVIE_DETAILS, detailsViewState.data);
+                startActivity(intent);
+                break;
+            case ERROR:
+                Toast.makeText(getActivity(), detailsViewState.error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

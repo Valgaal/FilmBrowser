@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI.Search;
+package com.example.nikita.filmbrowser.UI;
 
 public enum Status {
     START,

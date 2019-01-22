@@ -19,6 +19,7 @@ import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
+import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,62 +46,40 @@ public class FragmentTrending extends BaseListFragment {
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
-        updateScreen();
+        mViewModel.getTrendingDay();
+        mViewModel.stateLiveData.observe(this, this::updateScreen);
 
         mSwipe.setOnRefreshListener(() -> {
             mViewModel.startRequestFromDailyTrending();
-            SharedPreferences sp = getActivity().getSharedPreferences(MovieRepository.MY_PREF, Context.MODE_PRIVATE);
-            final String id = sp.getString(MovieRepository.WORK_REQUEST_ID,"");
-            WorkManager.getInstance().getStatusByIdLiveData(UUID.fromString(id))
-                    .observe(this, workStatus -> {
-                        if(workStatus != null && workStatus.getState().isFinished()) {
-                            if(workStatus.getState().equals(State.FAILED)){
-                                Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_LONG).show();
-                                mSwipe.setRefreshing(false);
-                            }else{
-                                updateScreen();
-                            }
-
-                        }
-                    });
         });
+        WorkManager.getInstance().getStatusByIdLiveData(mViewModel.getWMId())
+                .observe(this, workStatus -> {
+                    if (workStatus != null && workStatus.getState().isFinished()) {
+                        if (workStatus.getState().equals(State.FAILED)) {
+                            mViewModel.stateLiveData.setValue(SearchViewState.error(getResources().getString(R.string.internet_error)));
+                        }
+                    }
+                });
 
         return view;
     }
 
-    public void updateScreen(){
-        disposable = mViewModel.getTrendingDay()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Movie>>() {
-
-                    @Override
-                    public void onNext(List<Movie> searchModel) {
-                        mAdapter.setFilms(searchModel);
-                        mSwipe.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        mSwipe.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    public void updateScreen(SearchViewState searchViewState) {
+        switch (searchViewState.status) {
+            case SUCCESS:
+                mAdapter.setFilms(searchViewState.data);
+                mSwipe.setRefreshing(false);
+                break;
+            case ERROR:
+                Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_LONG).show();
+                mSwipe.setRefreshing(false);
+                break;
+        }
     }
 
     @Override
     public void filmSelected(int id) {
         super.filmSelected(id);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override

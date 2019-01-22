@@ -13,12 +13,9 @@ import com.example.nikita.filmbrowser.Model.DB.MovieDetailsDao;
 import com.example.nikita.filmbrowser.Model.DB.MoviewRoomDatabase;
 import com.example.nikita.filmbrowser.Model.Network.MoviesAPI;
 import com.example.nikita.filmbrowser.Models.SearchModel;
-import com.example.nikita.filmbrowser.Model.Network.NetworkRequestWork;
 
 import java.util.List;
 
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -31,8 +28,8 @@ public class MovieRepository implements IMovieRepository {
     private static final String BASE_SEARCH_URL = "https://api.themoviedb.org/3/";
     private final static String API_KEY = "655780709d6f3360d269a64bd96c99d6";
     public final static String IMAGE_PATH = "https://image.tmdb.org/t/p/w500";
-    public final static String MY_PREF = "my_pref";
-    public final static String WORK_REQUEST_ID = "work_id";
+    private final static String MY_PREF = "my_pref";
+    private final static String WORK_REQUEST_ID = "work_id";
 
     private MovieDao movieDao;
     private MovieDetailsDao detailsDao;
@@ -56,7 +53,12 @@ public class MovieRepository implements IMovieRepository {
         SharedPreferences sp = application.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(WORK_REQUEST_ID, uiid);
-        editor.commit();
+        editor.apply();
+    }
+
+    public String getWMid() {
+        SharedPreferences sp = application.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
+        return sp.getString(WORK_REQUEST_ID, "");
     }
 
     public Observable<SearchModel> searchByApi(String query) {
@@ -82,12 +84,16 @@ public class MovieRepository implements IMovieRepository {
     }
 
     public Single<MovieDetails> getMovie(int id) {
-        return detailsDao.getMovie(id);
+        return detailsDao.getMovie(id)
+                .map(item -> {
+                    item.setPosterPath(IMAGE_PATH + item.getPosterPath());
+                    return item;
+                });
     }
 
     public Single<MovieDetails> getMovieFromNetwork(int id) {
         return api.getMovie(id, API_KEY)
-                .map(item -> Converters.convertToMovieDetails(item));
+                .map(Converters::convertToMovieDetails);
     }
 
     public void insertMovie(Movie movie) {

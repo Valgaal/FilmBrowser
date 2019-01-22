@@ -13,6 +13,8 @@ public interface IMovieRepository {
 
     void saveWMRequestId(String id);
 
+    String getWMid();
+
     Observable<SearchModel> searchByApi(String query);
 
     Observable<SearchModel> getTrendingDaily();

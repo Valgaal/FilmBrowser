@@ -12,12 +12,9 @@ import android.widget.TextView;
 
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
-import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-public class FragmentDetails  extends Fragment{
+public class FragmentDetails extends Fragment {
 
     public static final String MOVIE_DETAILS = "movie";
 
@@ -46,47 +43,29 @@ public class FragmentDetails  extends Fragment{
         ImageView image = view.findViewById(R.id.posterBig);
 
         Bundle bundle = this.getArguments();
-        MovieDetails movieDetails = (MovieDetails) bundle.getSerializable(MOVIE_DETAILS);
+        ConvertedMovieDetails movieDetails = (ConvertedMovieDetails) bundle.getSerializable(MOVIE_DETAILS);
 
         title.setText(movieDetails.getTitle());
         date.setText(movieDetails.getReleaseDate());
-        genres.setText(getStringFromList(movieDetails.getGenres()));
-        country.setText(getStringFromList(movieDetails.getCountries()));
-        runtime.setText(Integer.toString(movieDetails.getRuntime()));
-        if(movieDetails.getRevenue() == 0){
+        genres.setText(movieDetails.getGenres());
+        country.setText(movieDetails.getCountries());
+        runtime.setText(movieDetails.getRuntime());
+        if (movieDetails.getRevenue() == null) {
             revenue.setVisibility(View.GONE);
             view.findViewById(R.id.revenueTextView).setVisibility(View.GONE);
-        }else{
-            revenue.setText(Integer.toString(movieDetails.getRevenue()).concat(" $"));
+        } else {
+            revenue.setText(movieDetails.getRevenue());
         }
-        popularity.setText(Double.toString(movieDetails.getPopularity()));
+        popularity.setText(movieDetails.getPopularity());
         overview.setText(movieDetails.getOverview());
-        if(movieDetails.getPosterPath()!=null) {
+        if (movieDetails.getPosterPath() != null) {
             Picasso.get()
-                    .load(MovieRepository.IMAGE_PATH.concat(movieDetails.getPosterPath()))
+                    .load(movieDetails.getPosterPath())
                     .resize(400, 400)
                     .centerInside()
                     .into(image);
         }
 
         return view;
-    }
-
-    private String getStringFromList(List<String> genres){
-        String genreString = "";
-        for(int i = 0; i< genres.size(); i++){
-            if(i + 1 == genres.size()){
-                genreString = genreString.concat(genres.get(i));
-            }
-            else{
-                genreString = genreString.concat(genres.get(i).concat("\n"));
-            }
-        }
-        return genreString;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 }

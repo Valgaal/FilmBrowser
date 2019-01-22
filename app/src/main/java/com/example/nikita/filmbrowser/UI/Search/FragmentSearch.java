@@ -1,6 +1,5 @@
 package com.example.nikita.filmbrowser.UI.Search;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,12 +19,6 @@ import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-
 public class FragmentSearch extends BaseListFragment {
 
     private SearchViewModel mViewModel;
@@ -43,15 +36,15 @@ public class FragmentSearch extends BaseListFragment {
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
         searchButton.setOnClickListener(view1 -> {
-            Utils.hideKeyboardFrom(getActivity(),view1);
+            Utils.hideKeyboardFrom(getActivity(), view1);
             mViewModel.searchTriggered(editText.getText().toString());
         });
         mViewModel.stateLiveData.observe(this, this::displayState);
         return view;
     }
 
-    private void displayState(SearchViewState searchViewState){
-        switch (searchViewState.status){
+    private void displayState(SearchViewState searchViewState) {
+        switch (searchViewState.status) {
             case SUCCESS:
                 mAdapter.setFilms(searchViewState.data);
                 break;
@@ -64,11 +57,6 @@ public class FragmentSearch extends BaseListFragment {
     @Override
     public void filmSelected(int id) {
         super.filmSelected(id);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override

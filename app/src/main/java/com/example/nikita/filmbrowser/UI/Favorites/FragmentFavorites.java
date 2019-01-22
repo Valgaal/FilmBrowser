@@ -15,12 +15,7 @@ import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.UI.BaseListFragment;
-
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
+import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
 
 public class FragmentFavorites extends BaseListFragment {
     private FavoritesViewModel mViewModel;
@@ -35,38 +30,24 @@ public class FragmentFavorites extends BaseListFragment {
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new MoviesAdapter(getActivity(), this);
         rw.setAdapter(mAdapter);
-
-        disposable = mViewModel.getFavorites()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Movie>>() {
-
-                    @Override
-                    public void onNext(List<Movie> movies) {
-                        mAdapter.setFilms(movies);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        mViewModel.stateLiveData.observe(this, this::displayState);
         return view;
+    }
+
+    private void displayState(SearchViewState searchViewState) {
+        switch (searchViewState.status) {
+            case SUCCESS:
+                mAdapter.setFilms(searchViewState.data);
+                break;
+            case ERROR:
+                Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override
     public void filmSelected(int id) {
         super.filmSelected(id);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override

@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public class GetTrendingDayUseCase extends BaseMoviesUseCase {
 
-    public Observable<List<Movie>> getFavorites() {
+    public Observable<List<Movie>> getTrendingDay() {
         return movieRepository.getTrendingDay().toObservable();
 
     }

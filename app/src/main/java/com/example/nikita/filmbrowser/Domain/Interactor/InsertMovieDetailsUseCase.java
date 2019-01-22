@@ -14,5 +14,4 @@ public class InsertMovieDetailsUseCase extends BaseMoviesUseCase {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
     }
-
 }

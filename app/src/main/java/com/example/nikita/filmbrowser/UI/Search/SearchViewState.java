@@ -3,12 +3,13 @@ package com.example.nikita.filmbrowser.UI.Search;
 import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.UI.Status;
 
 import java.util.List;
 
 import io.reactivex.annotations.Nullable;
 
-import static com.example.nikita.filmbrowser.UI.Search.Status.*;
+import static com.example.nikita.filmbrowser.UI.Status.*;
 
 public class SearchViewState {
 
