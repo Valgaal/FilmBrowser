@@ -2,33 +2,46 @@ package com.example.nikita.filmbrowser.UI.Favorites;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.example.nikita.filmbrowser.Room.Movie;
-import com.example.nikita.filmbrowser.Room.MovieRepository;
-import com.example.nikita.filmbrowser.UI.App;
+import com.example.nikita.filmbrowser.Domain.Interactors.Favorites.FavoritesInteractor;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FavoritesViewModel extends AndroidViewModel {
-    @Inject
-    MovieRepository mRepository;
+
+    MutableLiveData<ListViewState> stateLiveData = new MutableLiveData<>();
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private FavoritesInteractor favoritesInteractor;
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
-        App.getComponent().inject(this);
+        favoritesInteractor = new FavoritesInteractor();
     }
 
-    public Observable<List<Movie>> getFavorites(){
-        return mRepository.getFavorites();
+    @Override
+    protected void onCleared() {
+        disposable.clear();
     }
 
-    public void updateMovie(Movie movie){
-        mRepository.updateMovie(movie);
+    void getFavorites() {
+        disposable.add(favoritesInteractor.getFavorites()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        movies -> stateLiveData.setValue(ListViewState.success(movies)),
+                        throwable -> stateLiveData.setValue(ListViewState.error(throwable.getMessage()))
+
+                ));
+    }
+
+    public void updateMovie(MovieListModel movie) {
+        new FavoritesInteractor().updateMovie(movie);
     }
 
 }

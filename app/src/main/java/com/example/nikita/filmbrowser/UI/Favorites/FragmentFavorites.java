@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,18 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.MoviesAdapter;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.Main.MainActivity;
+import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Room.Movie;
-import com.example.nikita.filmbrowser.UI.BaseListFragment;
+import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
-
-public class FragmentFavorites extends BaseListFragment {
+public class FragmentFavorites extends Fragment implements MoviesAdapter.FavoritesChooser {
     private FavoritesViewModel mViewModel;
     private MoviesAdapter mAdapter;
 
@@ -33,50 +29,32 @@ public class FragmentFavorites extends BaseListFragment {
         mViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new MoviesAdapter(getActivity(), this);
+        mAdapter = new MoviesAdapter((MainActivity) getActivity(), this);
         rw.setAdapter(mAdapter);
-
-        disposable = mViewModel.getFavorites()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Movie>>() {
-
-                    @Override
-                    public void onNext(List<Movie> movies) {
-                        mAdapter.setFilms(movies);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        mViewModel.stateLiveData.observe(this, this::displayState);
+        mViewModel.getFavorites();
         return view;
     }
 
-    @Override
-    public void filmSelected(int id) {
-        super.filmSelected(id);
+    private void displayState(ListViewState listViewState) {
+        switch (listViewState.status) {
+            case SUCCESS:
+                mAdapter.setFilms(listViewState.data);
+                break;
+            case ERROR:
+                Toast.makeText(getActivity(), listViewState.error, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void addedToFav(Movie movie) {
+    public void addedToFav(MovieListModel movie) {
         mViewModel.updateMovie(movie);
         mAdapter.deleteMovie(movie);
     }
 
     @Override
-    public void deleteFromFav(Movie movie) {
+    public void deleteFromFav(MovieListModel movie) {
         mViewModel.updateMovie(movie);
         mAdapter.notifyDataSetChanged();
     }
