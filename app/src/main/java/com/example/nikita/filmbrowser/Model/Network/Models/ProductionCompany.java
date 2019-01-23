@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Models;
+package com.example.nikita.filmbrowser.Model.Network.Models;
 
 
 import com.google.gson.annotations.Expose;

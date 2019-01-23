@@ -1,7 +1,8 @@
-package com.example.nikita.filmbrowser.UI.Details;
+package com.example.nikita.filmbrowser.UI.Main;
 
 import android.support.annotation.NonNull;
 
+import com.example.nikita.filmbrowser.UI.Details.MovieDetailsModel;
 import com.example.nikita.filmbrowser.UI.Status;
 
 import io.reactivex.annotations.Nullable;
@@ -13,26 +14,22 @@ public class DetailsViewState {
     public final Status status;
 
     @Nullable
-    public final ConvertedMovieDetails data;
+    public final MovieDetailsModel data;
 
     @Nullable
     public final String error;
 
-    private DetailsViewState(Status status, @Nullable ConvertedMovieDetails data, @Nullable String error) {
+    private DetailsViewState(Status status, @Nullable MovieDetailsModel data, @Nullable String error) {
         this.status = status;
         this.data = data;
         this.error = error;
-    }
-
-    public static DetailsViewState start() {
-        return new DetailsViewState(START, null, null);
     }
 
     public static DetailsViewState loading() {
         return new DetailsViewState(LOADING, null, null);
     }
 
-    public static DetailsViewState success(@NonNull ConvertedMovieDetails data) {
+    public static DetailsViewState success(@NonNull MovieDetailsModel data) {
         return new DetailsViewState(SUCCESS, data, null);
     }
 

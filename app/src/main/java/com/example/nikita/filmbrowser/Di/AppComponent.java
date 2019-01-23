@@ -13,7 +13,10 @@ import dagger.Component;
 @Singleton
 public interface AppComponent {
     void inject(TrendingInteractor trendingInteractor);
+
     void inject(DetailsInteractor viewModel);
+
     void inject(FavoritesInteractor viewModel);
+
     void inject(SearchInteractor viewModel);
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @Entity(tableName = "film_details_information")
-public class MovieDetails implements Serializable{
+public class MovieDetails implements Serializable {
 
     @PrimaryKey
     private int id;

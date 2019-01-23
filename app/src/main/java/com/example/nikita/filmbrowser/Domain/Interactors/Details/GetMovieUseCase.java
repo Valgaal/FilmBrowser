@@ -2,14 +2,14 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Details;
 
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
-import com.example.nikita.filmbrowser.UI.Details.ConvertedMovieDetails;
+import com.example.nikita.filmbrowser.UI.Details.MovieDetailsModel;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-class GetMovieUseCase{
+class GetMovieUseCase {
 
     private IMovieRepository movieRepository;
 
@@ -17,7 +17,7 @@ class GetMovieUseCase{
         this.movieRepository = movieRepository;
     }
 
-    public Observable<ConvertedMovieDetails> getMovie(int id) {
+    public Observable<MovieDetailsModel> getMovie(int id) {
         return movieRepository.getMovie(id).onErrorResumeNext(throwable -> {//если нет в дб, то делает запрос
             return movieRepository.getMovieFromNetwork(id)
                     .map(item -> {
@@ -27,18 +27,18 @@ class GetMovieUseCase{
         }).map(this::convertMovieDetails).toObservable();
     }
 
-    private ConvertedMovieDetails convertMovieDetails(MovieDetails movieDetails) {
-        ConvertedMovieDetails convertedMovieDetails = new ConvertedMovieDetails();
-        convertedMovieDetails.setId(movieDetails.getId());
-        convertedMovieDetails.setTitle(movieDetails.getTitle());
-        convertedMovieDetails.setOverview(movieDetails.getOverview());
-        convertedMovieDetails.setPopularity(Double.toString(movieDetails.getPopularity()));
-        convertedMovieDetails.setPosterPath(movieDetails.getPosterPath());
-        convertedMovieDetails.setRatingAvg(Double.toString(movieDetails.getRatingAvg()));
-        convertedMovieDetails.setCountries(getStringFromList(movieDetails.getCountries()));
-        convertedMovieDetails.setGenres(getStringFromList(movieDetails.getGenres()));
-        convertedMovieDetails.setRevenue(movieDetails.getRevenue() + " $");
-        return convertedMovieDetails;
+    private MovieDetailsModel convertMovieDetails(MovieDetails movieDetails) {
+        MovieDetailsModel movieDetailsModel = new MovieDetailsModel();
+        movieDetailsModel.setId(movieDetails.getId());
+        movieDetailsModel.setTitle(movieDetails.getTitle());
+        movieDetailsModel.setOverview(movieDetails.getOverview());
+        movieDetailsModel.setPopularity(Double.toString(movieDetails.getPopularity()));
+        movieDetailsModel.setPosterPath(movieDetails.getPosterPath());
+        movieDetailsModel.setRatingAvg(Double.toString(movieDetails.getRatingAvg()));
+        movieDetailsModel.setCountries(getStringFromList(movieDetails.getCountries()));
+        movieDetailsModel.setGenres(getStringFromList(movieDetails.getGenres()));
+        movieDetailsModel.setRevenue(movieDetails.getRevenue() + " $");
+        return movieDetailsModel;
     }
 
     private String getStringFromList(List<String> genres) {

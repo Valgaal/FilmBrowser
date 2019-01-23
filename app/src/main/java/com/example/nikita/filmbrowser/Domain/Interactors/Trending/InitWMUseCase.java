@@ -8,7 +8,7 @@ import java.util.UUID;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-class InitWMUseCase{
+class InitWMUseCase {
 
     private IMovieRepository movieRepository;
     private OneTimeWorkRequest trendingRequest;
@@ -22,7 +22,7 @@ class InitWMUseCase{
                 .build();
     }
 
-    void enqueueWM(){
+    void enqueueWM() {
         WorkManager.getInstance().enqueue(trendingRequest);
         movieRepository.saveWMRequestId(trendingRequest.getId().toString());
     }

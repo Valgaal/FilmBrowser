@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.Models;
+package com.example.nikita.filmbrowser.UI;
 
 public class MovieListModel {
 

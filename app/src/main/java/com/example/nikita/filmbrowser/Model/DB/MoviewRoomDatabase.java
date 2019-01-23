@@ -10,15 +10,16 @@ import android.content.Context;
 @TypeConverters({Converters.class})
 public abstract class MoviewRoomDatabase extends RoomDatabase {
     public abstract MovieDao filmDao();
+
     public abstract MovieDetailsDao detailsDao();
 
     private static MoviewRoomDatabase INSTANCE;
 
-    public static MoviewRoomDatabase getInstance(final Context context){
-        if(INSTANCE == null){
-            synchronized (MoviewRoomDatabase.class){
-                if(INSTANCE == null){
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext() ,
+    public static MoviewRoomDatabase getInstance(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (MoviewRoomDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             MoviewRoomDatabase.class, "film_information").build();
                 }
             }

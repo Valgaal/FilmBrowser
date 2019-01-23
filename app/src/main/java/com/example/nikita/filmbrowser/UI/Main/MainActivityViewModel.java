@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI.Details;
+package com.example.nikita.filmbrowser.UI.Main;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -12,16 +12,15 @@ import java.net.UnknownHostException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailsViewModel extends AndroidViewModel {
+public class MainActivityViewModel extends AndroidViewModel {
 
     public MutableLiveData<DetailsViewState> stateLiveData = new MutableLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
     private DetailsInteractor detailsInteractor;
 
-    public DetailsViewModel(@NonNull Application application) {
+    public MainActivityViewModel(@NonNull Application application) {
         super(application);
         detailsInteractor = new DetailsInteractor();
     }

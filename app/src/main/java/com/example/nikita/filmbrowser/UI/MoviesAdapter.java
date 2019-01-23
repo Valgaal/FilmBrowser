@@ -10,8 +10,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.UI.Main.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,11 +24,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private FavoritesChooser favoritesChooser;
     private final LayoutInflater mInflater;
 
-    public interface FilmSelector{
+    public interface FilmSelector {
         void filmSelected(int id);
     }
-    public interface FavoritesChooser{
+
+    public interface FavoritesChooser {
         void addedToFav(MovieListModel movie);
+
         void deleteFromFav(MovieListModel movie);
     }
 
@@ -37,7 +39,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         this.filmSelector = mainActivity;
         this.favoritesChooser = favoritesChooser;
         this.context = mainActivity;
-}
+    }
 
     @NonNull
     @Override
@@ -51,18 +53,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         MovieListModel movie = mMovies.get(i);
         moviesViewHolder.title.setText(movie.getTitle());
         moviesViewHolder.ratingAvg.setText(movie.getRatingAvg());
-        if(movie.getPosterPath()!= null) {
+        if (movie.getPosterPath() != null) {
             Picasso.get()
                     .load(movie.getPosterPath())
-                    .resize(150,150)
+                    .resize(150, 150)
                     .centerInside()
                     .into(moviesViewHolder.poster);
         }
         moviesViewHolder.itemView.setOnClickListener(view -> filmSelector.filmSelected(movie.getId()));
         moviesViewHolder.favButton.setOnClickListener(new FavClick(movie, moviesViewHolder.favButton));
-        if(movie.isFavorites()){
+        if (movie.isFavorites()) {
             moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
-        }else{
+        } else {
             moviesViewHolder.favButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
         }
     }
@@ -74,18 +76,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         else return 0;
     }
 
-    public void setFilms(List<MovieListModel> films){
+    public void setFilms(List<MovieListModel> films) {
         mMovies = films;
         notifyDataSetChanged();
     }
 
-    public void deleteMovie(MovieListModel movie){
+    public void deleteMovie(MovieListModel movie) {
         mMovies.remove(movie);
         notifyDataSetChanged();
     }
 
 
-    class MoviesViewHolder extends RecyclerView.ViewHolder{
+    class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView poster;
         private final TextView title;
@@ -101,23 +103,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         }
     }
 
-    class FavClick implements View.OnClickListener{
+    class FavClick implements View.OnClickListener {
 
         MovieListModel movie;
         ImageButton button;
 
-        FavClick(MovieListModel movie, ImageButton button){
+        FavClick(MovieListModel movie, ImageButton button) {
             this.movie = movie;
             this.button = button;
         }
 
         @Override
         public void onClick(View view) {
-            if(movie.isFavorites()){
+            if (movie.isFavorites()) {
                 movie.setFavorites(false);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
                 favoritesChooser.deleteFromFav(movie);
-            }else{
+            } else {
                 movie.setFavorites(true);
                 button.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
                 favoritesChooser.addedToFav(movie);

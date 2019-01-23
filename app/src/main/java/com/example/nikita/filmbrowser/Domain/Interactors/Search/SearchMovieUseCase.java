@@ -3,13 +3,13 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Search;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchModel;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 
-class SearchMovieUseCase{
+class SearchMovieUseCase {
 
     private IMovieRepository movieRepository;
 

@@ -1,10 +1,8 @@
 package com.example.nikita.filmbrowser.Domain.Interactors;
 
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
-import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
-import com.example.nikita.filmbrowser.Models.MovieListModel;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

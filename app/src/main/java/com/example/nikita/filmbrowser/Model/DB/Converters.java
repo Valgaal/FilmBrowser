@@ -3,9 +3,9 @@ package com.example.nikita.filmbrowser.Model.DB;
 import android.arch.persistence.room.TypeConverter;
 
 import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
-import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
-import com.example.nikita.filmbrowser.Models.MovieListModel;
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.GetDetailsMovieModel;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchResultModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -72,7 +72,7 @@ public class Converters {
         return movie;
     }
 
-    public static MovieListModel convertToMovieListModel(Movie movie){
+    public static MovieListModel convertToMovieListModel(Movie movie) {
         MovieListModel movieListModel = new MovieListModel();
         movieListModel.setFavorites(movie.isFavorites());
         movieListModel.setTrending(movie.isTrending());
@@ -83,9 +83,9 @@ public class Converters {
         return movieListModel;
     }
 
-    public static List<MovieListModel> convertListToMovieListModel(List<Movie> movies){
+    public static List<MovieListModel> convertListToMovieListModel(List<Movie> movies) {
         ArrayList<MovieListModel> list = new ArrayList<>();
-        for(int i = 0; i < movies.size(); i++) {
+        for (int i = 0; i < movies.size(); i++) {
             list.add(convertToMovieListModel(movies.get(i)));
         }
         return list;

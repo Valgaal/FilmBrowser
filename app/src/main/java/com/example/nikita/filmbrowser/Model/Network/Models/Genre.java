@@ -1,23 +1,23 @@
-package com.example.nikita.filmbrowser.Models;
+package com.example.nikita.filmbrowser.Model.Network.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SpokenLanguage {
+public class Genre {
 
-    @SerializedName("iso_639_1")
+    @SerializedName("id")
     @Expose
-    private String iso6391;
+    private int id;
     @SerializedName("name")
     @Expose
     private String name;
 
-    public String getIso6391() {
-        return iso6391;
+    public int getId() {
+        return id;
     }
 
-    public void setIso6391(String iso6391) {
-        this.iso6391 = iso6391;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

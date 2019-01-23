@@ -14,14 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.MovieListModel;
-import com.example.nikita.filmbrowser.UI.MainActivity;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.Main.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Utils.Utils;
 
-public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesChooser{
+public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesChooser {
 
     private SearchViewModel mViewModel;
     private MoviesAdapter mAdapter;
@@ -45,13 +44,13 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesC
         return view;
     }
 
-    private void displayState(SearchViewState searchViewState) {
-        switch (searchViewState.status) {
+    private void displayState(ListViewState listViewState) {
+        switch (listViewState.status) {
             case SUCCESS:
-                mAdapter.setFilms(searchViewState.data);
+                mAdapter.setFilms(listViewState.data);
                 break;
             case ERROR:
-                Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), listViewState.error, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

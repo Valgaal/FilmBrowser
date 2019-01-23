@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
-public class ConvertedMovieDetails implements Serializable {
+public class MovieDetailsModel implements Serializable {
 
     private int id;
     private String title;

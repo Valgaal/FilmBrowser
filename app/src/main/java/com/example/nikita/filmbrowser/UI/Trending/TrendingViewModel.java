@@ -6,24 +6,18 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.Trending.TrendingInteractor;
-import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Models.MovieListModel;
-import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
-import java.util.List;
 import java.util.UUID;
 
-import androidx.work.State;
-import androidx.work.WorkManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class TrendingViewModel extends AndroidViewModel {
 
-    MutableLiveData<SearchViewState> stateLiveData = new MutableLiveData<>();
+    MutableLiveData<ListViewState> stateLiveData = new MutableLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
     private TrendingInteractor trendingInteractor;
 
@@ -42,9 +36,9 @@ public class TrendingViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        movies -> stateLiveData.setValue(SearchViewState.success(movies)),
+                        movies -> stateLiveData.setValue(ListViewState.success(movies)),
                         throwable -> {
-                            stateLiveData.setValue(SearchViewState.error(throwable.getMessage()));
+                            stateLiveData.setValue(ListViewState.error(throwable.getMessage()));
                         }
                 ));
     }
@@ -53,7 +47,7 @@ public class TrendingViewModel extends AndroidViewModel {
         trendingInteractor.startRequestFromDailyTrending();
     }
 
-    void initWM(){
+    void initWM() {
         trendingInteractor.createWMRequest();
     }
 

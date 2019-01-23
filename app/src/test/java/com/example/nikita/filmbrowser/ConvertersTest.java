@@ -1,6 +1,6 @@
 package com.example.nikita.filmbrowser;
 
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchResultModel;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 

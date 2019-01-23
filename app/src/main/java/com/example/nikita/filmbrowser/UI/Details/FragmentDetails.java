@@ -11,14 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
 import com.squareup.picasso.Picasso;
 
 public class FragmentDetails extends Fragment {
 
     public static final String MOVIE_DETAILS = "movie";
 
-    public static FragmentDetails newInstance(ConvertedMovieDetails movieDetails) {
+    public static FragmentDetails newInstance(MovieDetailsModel movieDetails) {
         FragmentDetails myFragment = new FragmentDetails();
 
         Bundle args = new Bundle();
@@ -43,7 +42,7 @@ public class FragmentDetails extends Fragment {
         ImageView image = view.findViewById(R.id.posterBig);
 
         Bundle bundle = this.getArguments();
-        ConvertedMovieDetails movieDetails = (ConvertedMovieDetails) bundle.getSerializable(MOVIE_DETAILS);
+        MovieDetailsModel movieDetails = (MovieDetailsModel) bundle.getSerializable(MOVIE_DETAILS);
 
         title.setText(movieDetails.getTitle());
         date.setText(movieDetails.getReleaseDate());

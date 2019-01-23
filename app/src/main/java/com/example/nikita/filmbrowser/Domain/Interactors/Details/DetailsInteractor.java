@@ -2,7 +2,7 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Details;
 
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.UI.App;
-import com.example.nikita.filmbrowser.UI.Details.ConvertedMovieDetails;
+import com.example.nikita.filmbrowser.UI.Details.MovieDetailsModel;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class DetailsInteractor {
         App.getComponent().inject(this);
     }
 
-    public Observable<ConvertedMovieDetails> getMovie(int id){
+    public Observable<MovieDetailsModel> getMovie(int id) {
         return new GetMovieUseCase(movieRepository).getMovie(id);
     }
 }

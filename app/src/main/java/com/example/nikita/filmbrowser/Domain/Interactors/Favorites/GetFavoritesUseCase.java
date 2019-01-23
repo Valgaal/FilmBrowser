@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-class GetFavoritesUseCase{
+class GetFavoritesUseCase {
     private IMovieRepository movieRepository;
 
     GetFavoritesUseCase(IMovieRepository movieRepository) {

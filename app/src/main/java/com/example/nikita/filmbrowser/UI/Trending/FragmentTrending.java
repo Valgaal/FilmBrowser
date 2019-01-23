@@ -13,15 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.Models.MovieListModel;
-import com.example.nikita.filmbrowser.UI.MainActivity;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.Main.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
-import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
-
-import androidx.work.State;
-import androidx.work.WorkManager;
+import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
 public class FragmentTrending extends Fragment implements MoviesAdapter.FavoritesChooser {
 
@@ -48,14 +44,14 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
         return view;
     }
 
-    public void updateScreen(SearchViewState searchViewState) {
-        switch (searchViewState.status) {
+    public void updateScreen(ListViewState listViewState) {
+        switch (listViewState.status) {
             case SUCCESS:
-                mAdapter.setFilms(searchViewState.data);
+                mAdapter.setFilms(listViewState.data);
                 mSwipe.setRefreshing(false);
                 break;
             case ERROR:
-                Toast.makeText(getActivity(), searchViewState.error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), listViewState.error, Toast.LENGTH_LONG).show();
                 mSwipe.setRefreshing(false);
                 break;
         }

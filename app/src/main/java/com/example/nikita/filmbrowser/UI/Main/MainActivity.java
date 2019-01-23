@@ -1,4 +1,4 @@
-package com.example.nikita.filmbrowser.UI;
+package com.example.nikita.filmbrowser.UI.Main;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -13,10 +13,9 @@ import android.widget.Toast;
 
 import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.UI.Details.DetailsActivity;
-import com.example.nikita.filmbrowser.UI.Details.DetailsViewModel;
-import com.example.nikita.filmbrowser.UI.Details.DetailsViewState;
 import com.example.nikita.filmbrowser.UI.Details.FragmentDetails;
 import com.example.nikita.filmbrowser.UI.Favorites.FragmentFavorites;
+import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.UI.Search.FragmentSearch;
 import com.example.nikita.filmbrowser.UI.Trending.FragmentTrending;
 
@@ -24,31 +23,31 @@ import com.example.nikita.filmbrowser.UI.Trending.FragmentTrending;
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.FilmSelector {
 
     private Toolbar toolbar;
-    private DetailsViewModel detailsViewModel;
+    private MainActivityViewModel mainActivityViewModel;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_trending:
-                        selectItem(0);
-                        toolbar.setTitle(getResources().getString(R.string.title_daily_trending));
-                        return true;
-                    case R.id.navigation_search:
-                        selectItem(1);
-                        toolbar.setTitle(getResources().getString(R.string.title_search));
-                        return true;
-                    case R.id.navigation_favorites:
-                        selectItem(2);
-                        toolbar.setTitle(getResources().getString(R.string.title_favorites));
-                        return true;
-                }
-                return false;
-            };
+        switch (item.getItemId()) {
+            case R.id.navigation_trending:
+                selectItem(0);
+                toolbar.setTitle(getResources().getString(R.string.title_daily_trending));
+                return true;
+            case R.id.navigation_search:
+                selectItem(1);
+                toolbar.setTitle(getResources().getString(R.string.title_search));
+                return true;
+            case R.id.navigation_favorites:
+                selectItem(2);
+                toolbar.setTitle(getResources().getString(R.string.title_favorites));
+                return true;
+        }
+        return false;
+    };
 
-    public void selectItem(int position){
+    public void selectItem(int position) {
 
         Fragment fragment = null;
-        switch (position){
+        switch (position) {
             case 0:
                 fragment = new FragmentTrending();
                 break;
@@ -74,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayShowTitleEnabled(false);//отключает app title
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             selectItem(0);
         }
-        detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
-        detailsViewModel.stateLiveData.observe(this, this::displayState);
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel.stateLiveData.observe(this, this::displayState);
         toolbar.setTitle(getResources().getString(R.string.title_daily_trending));
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
 
     @Override
     public void filmSelected(int id) {
-        detailsViewModel.getMovie(id);
+        mainActivityViewModel.getMovie(id);
     }
 
     private void displayState(DetailsViewState detailsViewState) {

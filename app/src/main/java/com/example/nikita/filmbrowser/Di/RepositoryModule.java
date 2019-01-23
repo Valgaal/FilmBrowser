@@ -16,14 +16,14 @@ public class RepositoryModule {
 
     private Application application;
 
-    public RepositoryModule(@NonNull Application application){
+    public RepositoryModule(@NonNull Application application) {
         this.application = application;
     }
 
     @Provides
     @NonNull
     @Singleton
-    public IMovieRepository provideIMovieRepository(){
+    public IMovieRepository provideIMovieRepository() {
         return new MovieRepository(application);
     }
 }

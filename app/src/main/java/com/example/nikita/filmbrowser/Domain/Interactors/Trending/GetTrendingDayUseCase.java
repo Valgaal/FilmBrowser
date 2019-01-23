@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-class GetTrendingDayUseCase{
+class GetTrendingDayUseCase {
 
     private IMovieRepository movieRepository;
 

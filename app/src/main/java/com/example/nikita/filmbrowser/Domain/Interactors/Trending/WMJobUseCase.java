@@ -1,16 +1,14 @@
 package com.example.nikita.filmbrowser.Domain.Interactors.Trending;
 
-import com.example.nikita.filmbrowser.Domain.Interactors.UpdateMovieDetailsUseCase;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Models.SearchModel;
-import com.example.nikita.filmbrowser.Models.SearchResultModel;
-import com.example.nikita.filmbrowser.UI.Details.ConvertedMovieDetails;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchResultModel;
 
 import java.util.List;
 
-class WMJobUseCase{
+class WMJobUseCase {
 
     private IMovieRepository movieRepository;
 

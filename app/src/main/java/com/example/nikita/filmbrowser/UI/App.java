@@ -9,17 +9,17 @@ import com.example.nikita.filmbrowser.Di.RepositoryModule;
 public class App extends Application {
     private static AppComponent component;
 
-    public static  AppComponent getComponent(){
+    public static AppComponent getComponent() {
         return component;
     }
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         component = buildComponent();
     }
 
-    protected AppComponent buildComponent(){
+    protected AppComponent buildComponent() {
         return DaggerAppComponent.builder()
                 .repositoryModule(new RepositoryModule(this))
                 .build();

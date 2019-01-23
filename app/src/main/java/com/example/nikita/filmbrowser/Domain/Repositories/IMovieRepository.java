@@ -2,8 +2,7 @@ package com.example.nikita.filmbrowser.Domain.Repositories;
 
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
-import com.example.nikita.filmbrowser.Models.MovieListModel;
-import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchModel;
 
 import java.util.List;
 

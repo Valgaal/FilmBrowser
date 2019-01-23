@@ -12,7 +12,7 @@ import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetailsDao;
 import com.example.nikita.filmbrowser.Model.DB.MoviewRoomDatabase;
 import com.example.nikita.filmbrowser.Model.Network.MoviesAPI;
-import com.example.nikita.filmbrowser.Models.SearchModel;
+import com.example.nikita.filmbrowser.Model.Network.Models.SearchModel;
 
 import java.util.List;
 
