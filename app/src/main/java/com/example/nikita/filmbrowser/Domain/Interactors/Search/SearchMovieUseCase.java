@@ -23,13 +23,14 @@ class SearchMovieUseCase{
                 .flatMap(searchResultModels ->
                         Observable.fromIterable(searchResultModels)
                                 .map(item -> {
+                                    Movie converted = Converters.convertToMovie(item);
                                     try {//эта проверка на случай того, если уже есть фильм, то тогда нужно узнать в избранном он или нет и обновить его
                                         Movie movie = movieRepository.getMovieById(item.getId()).blockingGet();
-                                        Movie converted = Converters.convertToMovie(item);
                                         converted.setFavorites(movie.isFavorites());
                                         return converted;
                                     } catch (Exception e) {
-                                        return Converters.convertToMovie(item);
+                                        movieRepository.insertMovie(converted);
+                                        return converted;
                                     }
                                 })
                 )

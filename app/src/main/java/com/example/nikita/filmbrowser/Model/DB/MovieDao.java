@@ -28,4 +28,6 @@ public interface MovieDao {
     @Query("SELECT * FROM film_information WHERE Favorites = 1")
     Single<List<Movie>> getFavorites();
 
+    @Query("UPDATE film_information SET trending = 0 WHERE trending = 1")
+    void clearTrending();
 }

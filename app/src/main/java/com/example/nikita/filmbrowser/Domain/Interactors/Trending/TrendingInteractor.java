@@ -2,7 +2,9 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Trending;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.UpdateMovieDetailsUseCase;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.UI.App;
 
 import java.util.List;
@@ -26,22 +28,27 @@ public class TrendingInteractor {
         getTrendingDayUseCase = new GetTrendingDayUseCase(movieRepository);
 
     }
-    public Observable<List<Movie>> getTrendingDaily(){
+    public Observable<List<MovieListModel>> getTrendingDaily(){
         return getTrendingDayUseCase.getTrendingDay()
                 .doOnError(throwable -> {
                     startRequestFromDailyTrending();
-                });
+                })
+                .map(Converters::convertListToMovieListModel);
     }
 
     public void startRequestFromDailyTrending(){
-        initWMUseCase.initWMUseCase();
+        initWMUseCase.enqueueWM();
+    }
+
+    public void createWMRequest(){
+        initWMUseCase.createWMRequest();
     }
 
     public UUID getWMId(){
        return initWMUseCase.getWMId();
     }
 
-    public void updateMovie(Movie movie){
+    public void updateMovie(MovieListModel movie){
         new UpdateMovieDetailsUseCase(movieRepository).updateMovie(movie);
     }
 

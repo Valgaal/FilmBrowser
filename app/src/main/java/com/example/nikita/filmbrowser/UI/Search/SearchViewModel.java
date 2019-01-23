@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.Search.SearchInteractor;
-import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.R;
 
 import java.net.UnknownHostException;
@@ -30,11 +30,11 @@ public class SearchViewModel extends AndroidViewModel {
         disposable.clear();
     }
 
-    void insertMovie(Movie movie) {
-        searchInteractor.insertMovie(movie);
+    void insertMovie(MovieListModel movie) {
+        searchInteractor.updateMovie(movie);
     }
 
-    void updateMovie(Movie movie) {
+    void updateMovie(MovieListModel movie) {
         searchInteractor.updateMovie(movie);
     }
 

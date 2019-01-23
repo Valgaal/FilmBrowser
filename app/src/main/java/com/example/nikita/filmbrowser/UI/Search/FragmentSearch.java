@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.UI.MainActivity;
 import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
@@ -56,12 +57,12 @@ public class FragmentSearch extends Fragment implements MoviesAdapter.FavoritesC
     }
 
     @Override
-    public void addedToFav(Movie movie) {
-        mViewModel.insertMovie(movie);
+    public void addedToFav(MovieListModel movie) {
+        mViewModel.updateMovie(movie);
     }
 
     @Override
-    public void deleteFromFav(Movie movie) {
+    public void deleteFromFav(MovieListModel movie) {
         mViewModel.updateMovie(movie);
     }
 }

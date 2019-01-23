@@ -2,13 +2,16 @@ package com.example.nikita.filmbrowser.Model.DB;
 
 import android.arch.persistence.room.TypeConverter;
 
+import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
 import com.example.nikita.filmbrowser.Models.GetDetailsMovieModel;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.nikita.filmbrowser.Model.Repositories.MovieRepository.IMAGE_PATH;
 
@@ -67,5 +70,24 @@ public class Converters {
         movie.setRatingAvg(resultModel.getVoteAverage());
         movie.setReleaseDate(resultModel.convertReleaseDate());
         return movie;
+    }
+
+    public static MovieListModel convertToMovieListModel(Movie movie){
+        MovieListModel movieListModel = new MovieListModel();
+        movieListModel.setFavorites(movie.isFavorites());
+        movieListModel.setTrending(movie.isTrending());
+        movieListModel.setId(movie.getId());
+        movieListModel.setPosterPath(MovieRepository.IMAGE_PATH + movie.getPosterPath());
+        movieListModel.setRatingAvg(Double.toString(movie.getRatingAvg()));
+        movieListModel.setTitle(movie.getTitle() + movie.getReleaseDate());
+        return movieListModel;
+    }
+
+    public static List<MovieListModel> convertListToMovieListModel(List<Movie> movies){
+        ArrayList<MovieListModel> list = new ArrayList<>();
+        for(int i = 0; i < movies.size(); i++) {
+            list.add(convertToMovieListModel(movies.get(i)));
+        }
+        return list;
     }
 }

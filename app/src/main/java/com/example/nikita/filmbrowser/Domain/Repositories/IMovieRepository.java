@@ -2,6 +2,7 @@ package com.example.nikita.filmbrowser.Domain.Repositories;
 
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Model.DB.MovieDetails;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface IMovieRepository {
+
+    void clearTrending();
 
     void saveWMRequestId(String id);
 

@@ -24,6 +24,7 @@ import com.example.nikita.filmbrowser.UI.Trending.FragmentTrending;
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.FilmSelector {
 
     private Toolbar toolbar;
+    private DetailsViewModel detailsViewModel;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
         if(savedInstanceState == null){
             selectItem(0);
         }
+        detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+        detailsViewModel.stateLiveData.observe(this, this::displayState);
         toolbar.setTitle(getResources().getString(R.string.title_daily_trending));
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -83,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
 
     @Override
     public void filmSelected(int id) {
-        DetailsViewModel detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
         detailsViewModel.getMovie(id);
-        detailsViewModel.stateLiveData.observe(this, this::displayState);
     }
 
     private void displayState(DetailsViewState detailsViewState) {

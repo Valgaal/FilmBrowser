@@ -1,10 +1,12 @@
 package com.example.nikita.filmbrowser.Domain.Interactors.Trending;
 
+import com.example.nikita.filmbrowser.Domain.Interactors.UpdateMovieDetailsUseCase;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
 import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
 import com.example.nikita.filmbrowser.Models.SearchModel;
 import com.example.nikita.filmbrowser.Models.SearchResultModel;
+import com.example.nikita.filmbrowser.UI.Details.ConvertedMovieDetails;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ class WMJobUseCase{
     }
 
     void wmJob() {
+        movieRepository.clearTrending();
         SearchModel searchModel = movieRepository.getTrendingDaily().blockingSingle();
         List<SearchResultModel> searchList = searchModel.getResults();
         for (int i = 0; i < searchList.size(); i++) {
@@ -26,6 +29,7 @@ class WMJobUseCase{
             try {
                 Movie movieFromDb = movieRepository.getMovieById(movie.getId()).blockingGet();
                 movie.setFavorites(movieFromDb.isFavorites());
+                movie.setTrending(true);
                 movieRepository.updateMovie(movie);
             } catch (Exception e) {
                 movieRepository.insertMovie(movie);

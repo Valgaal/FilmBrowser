@@ -2,7 +2,9 @@ package com.example.nikita.filmbrowser.Domain.Interactors.Favorites;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.UpdateMovieDetailsUseCase;
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.UI.App;
 
 import java.util.List;
@@ -20,11 +22,13 @@ public class FavoritesInteractor {
         App.getComponent().inject(this);
     }
 
-    public Observable<List<Movie>> getFavorites() {
-        return new GetFavoritesUseCase(movieRepository).getFavorites();
+    public Observable<List<MovieListModel>> getFavorites() {
+        return new GetFavoritesUseCase(movieRepository)
+                .getFavorites()
+                .map(Converters::convertListToMovieListModel);
     }
 
-    public void updateMovie(Movie movie){
+    public void updateMovie(MovieListModel movie){
         new UpdateMovieDetailsUseCase(movieRepository).updateMovie(movie);
     }
 }

@@ -49,6 +49,11 @@ public class MovieRepository implements IMovieRepository {
         api = retrofit.create(MoviesAPI.class);
     }
 
+    @Override
+    public void clearTrending() {
+        movieDao.clearTrending();
+    }
+
     public void saveWMRequestId(String uiid) {
         SharedPreferences sp = application.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();

@@ -2,7 +2,6 @@ package com.example.nikita.filmbrowser.UI;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.nikita.filmbrowser.Model.DB.Movie;
-import com.example.nikita.filmbrowser.Model.Repositories.MovieRepository;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,7 +18,7 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    private List<Movie> mMovies;
+    private List<MovieListModel> mMovies;
     private Context context;
     private FilmSelector filmSelector;
     private FavoritesChooser favoritesChooser;
@@ -30,8 +28,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         void filmSelected(int id);
     }
     public interface FavoritesChooser{
-        void addedToFav(Movie movie);
-        void deleteFromFav(Movie movie);
+        void addedToFav(MovieListModel movie);
+        void deleteFromFav(MovieListModel movie);
     }
 
     public MoviesAdapter(MainActivity mainActivity, FavoritesChooser favoritesChooser) {
@@ -50,12 +48,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder moviesViewHolder, int i) {
-        Movie movie = mMovies.get(i);
-        moviesViewHolder.title.setText(movie.getTitle().concat(movie.getReleaseDate()));
-        moviesViewHolder.ratingAvg.setText(Double.toString(movie.getRatingAvg()));
+        MovieListModel movie = mMovies.get(i);
+        moviesViewHolder.title.setText(movie.getTitle());
+        moviesViewHolder.ratingAvg.setText(movie.getRatingAvg());
         if(movie.getPosterPath()!= null) {
             Picasso.get()
-                    .load(MovieRepository.IMAGE_PATH.concat(movie.getPosterPath()))
+                    .load(movie.getPosterPath())
                     .resize(150,150)
                     .centerInside()
                     .into(moviesViewHolder.poster);
@@ -76,12 +74,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         else return 0;
     }
 
-    public void setFilms(List<Movie> films){
+    public void setFilms(List<MovieListModel> films){
         mMovies = films;
         notifyDataSetChanged();
     }
 
-    public void deleteMovie(Movie movie){
+    public void deleteMovie(MovieListModel movie){
         mMovies.remove(movie);
         notifyDataSetChanged();
     }
@@ -105,10 +103,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     class FavClick implements View.OnClickListener{
 
-        Movie movie;
+        MovieListModel movie;
         ImageButton button;
 
-        FavClick(Movie movie, ImageButton button){
+        FavClick(MovieListModel movie, ImageButton button){
             this.movie = movie;
             this.button = button;
         }

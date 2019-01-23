@@ -1,7 +1,9 @@
 package com.example.nikita.filmbrowser.Domain.Interactors;
 
 import com.example.nikita.filmbrowser.Domain.Repositories.IMovieRepository;
+import com.example.nikita.filmbrowser.Model.DB.Converters;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,8 +17,13 @@ public class UpdateMovieDetailsUseCase{
         this.movieRepository = movieRepository;
     }
 
-    public void updateMovie(Movie movie) {
-        Completable.fromAction(() -> movieRepository.updateMovie(movie))
+    public void updateMovie(MovieListModel movie) {
+        Completable.fromAction(() -> {
+            Movie movieFromDB = movieRepository.getMovieById(movie.getId()).blockingGet();
+            movieFromDB.setFavorites(movie.isFavorites());
+            movieFromDB.setTrending(movie.isTrending());
+            movieRepository.updateMovie(movieFromDB);
+        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();

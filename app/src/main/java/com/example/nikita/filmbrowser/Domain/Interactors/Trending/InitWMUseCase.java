@@ -11,14 +11,18 @@ import androidx.work.WorkManager;
 class InitWMUseCase{
 
     private IMovieRepository movieRepository;
+    private OneTimeWorkRequest trendingRequest;
 
     InitWMUseCase(IMovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
-    void initWMUseCase() {
-        OneTimeWorkRequest trendingRequest = new OneTimeWorkRequest.Builder(NetworkRequestWork.class)
+    void createWMRequest() {
+        trendingRequest = new OneTimeWorkRequest.Builder(NetworkRequestWork.class)
                 .build();
+    }
+
+    void enqueueWM(){
         WorkManager.getInstance().enqueue(trendingRequest);
         movieRepository.saveWMRequestId(trendingRequest.getId().toString());
     }

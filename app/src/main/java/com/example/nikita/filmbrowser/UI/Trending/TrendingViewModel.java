@@ -7,11 +7,15 @@ import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.Trending.TrendingInteractor;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
+import com.example.nikita.filmbrowser.R;
 import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
 
 import java.util.List;
 import java.util.UUID;
 
+import androidx.work.State;
+import androidx.work.WorkManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -49,11 +53,15 @@ public class TrendingViewModel extends AndroidViewModel {
         trendingInteractor.startRequestFromDailyTrending();
     }
 
+    void initWM(){
+        trendingInteractor.createWMRequest();
+    }
+
     UUID getWMId() {
         return trendingInteractor.getWMId();
     }
 
-    void updateMovie(Movie movie) {
+    void updateMovie(MovieListModel movie) {
         trendingInteractor.updateMovie(movie);
     }
 

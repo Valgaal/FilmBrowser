@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.nikita.filmbrowser.Domain.Interactors.Favorites.FavoritesInteractor;
 import com.example.nikita.filmbrowser.Model.DB.Movie;
+import com.example.nikita.filmbrowser.Models.MovieListModel;
 import com.example.nikita.filmbrowser.UI.Search.SearchViewState;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class FavoritesViewModel extends AndroidViewModel {
                 ));
     }
 
-    public void updateMovie(Movie movie) {
+    public void updateMovie(MovieListModel movie) {
         new FavoritesInteractor().updateMovie(movie);
     }
 
