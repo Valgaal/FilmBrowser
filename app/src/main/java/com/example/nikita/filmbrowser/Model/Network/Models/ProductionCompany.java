@@ -4,7 +4,7 @@ package com.example.nikita.filmbrowser.Model.Network.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductionCompany {
+class ProductionCompany {
 
     @SerializedName("id")
     @Expose

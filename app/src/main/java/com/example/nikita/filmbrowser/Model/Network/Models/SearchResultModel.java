@@ -231,7 +231,7 @@ public class SearchResultModel {
 
     }
 
-    public void setReleaseDate(String releaseDate) {
+    private void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 

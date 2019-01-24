@@ -72,7 +72,7 @@ public class Converters {
         return movie;
     }
 
-    public static MovieListModel convertToMovieListModel(Movie movie) {
+    private static MovieListModel convertToMovieListModel(Movie movie) {
         MovieListModel movieListModel = new MovieListModel();
         movieListModel.setFavorites(movie.isFavorites());
         movieListModel.setTrending(movie.isTrending());

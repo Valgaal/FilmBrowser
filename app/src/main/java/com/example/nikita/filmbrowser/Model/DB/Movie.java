@@ -3,7 +3,6 @@ package com.example.nikita.filmbrowser.Model.DB;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Query;
 
 @Entity(tableName = "film_information")
 public class Movie {

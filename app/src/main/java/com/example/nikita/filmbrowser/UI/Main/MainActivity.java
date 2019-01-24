@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
         return false;
     };
 
-    public void selectItem(int position) {
+    private void selectItem(int position) {
 
         Fragment fragment = null;
         switch (position) {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Fil
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayShowTitleEnabled(false);//отключает app title
+        if(actionbar != null) actionbar.setDisplayShowTitleEnabled(false);//отключает app title
         if (savedInstanceState == null) {
             selectItem(0);
         }

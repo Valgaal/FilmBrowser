@@ -1,6 +1,7 @@
 package com.example.nikita.filmbrowser.UI.Trending;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.nikita.filmbrowser.UI.MovieListModel;
-import com.example.nikita.filmbrowser.UI.Main.MainActivity;
-import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.R;
+import com.example.nikita.filmbrowser.UI.Main.MainActivity;
+import com.example.nikita.filmbrowser.UI.MovieListModel;
+import com.example.nikita.filmbrowser.UI.MoviesAdapter;
 import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
 public class FragmentTrending extends Fragment implements MoviesAdapter.FavoritesChooser {
@@ -30,6 +31,7 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
         mSwipe = view.findViewById(R.id.swipe_refresh);
+        mSwipe.setColorSchemeColors(Color.BLACK);
         mViewModel = ViewModelProviders.of(this).get(TrendingViewModel.class);
         RecyclerView rw = view.findViewById(R.id.rw_trending);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -37,14 +39,22 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
         rw.setAdapter(mAdapter);
         mViewModel.stateLiveData.observe(this, this::updateScreen);
         mViewModel.getTrendingDay();
-        mViewModel.initWM();
         mSwipe.setOnRefreshListener(() -> {
             mViewModel.startRequestFromDailyTrending();
+            mViewModel.getWorkInfo().observe(this, workInfo -> {
+                if (workInfo != null) {
+                    if (workInfo.getState().isFinished()) {
+                        mViewModel.getTrendingDay();
+                    } else {
+                        mViewModel.stateLiveData.setValue(ListViewState.loading());
+                    }
+                }
+            });
         });
         return view;
     }
 
-    public void updateScreen(ListViewState listViewState) {
+    private void updateScreen(ListViewState listViewState) {
         switch (listViewState.status) {
             case SUCCESS:
                 mAdapter.setFilms(listViewState.data);
@@ -53,6 +63,9 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
             case ERROR:
                 Toast.makeText(getActivity(), listViewState.error, Toast.LENGTH_LONG).show();
                 mSwipe.setRefreshing(false);
+                break;
+            case LOADING:
+                mSwipe.setRefreshing(true);
                 break;
         }
     }

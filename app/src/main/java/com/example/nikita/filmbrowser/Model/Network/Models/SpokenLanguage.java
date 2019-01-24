@@ -3,7 +3,7 @@ package com.example.nikita.filmbrowser.Model.Network.Models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SpokenLanguage {
+class SpokenLanguage {
 
     @SerializedName("iso_639_1")
     @Expose

@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivityViewModel extends AndroidViewModel {
+class MainActivityViewModel extends AndroidViewModel {
 
     public MutableLiveData<DetailsViewState> stateLiveData = new MutableLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();

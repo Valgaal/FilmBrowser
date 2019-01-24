@@ -1,7 +1,5 @@
 package com.example.nikita.filmbrowser.UI.Details;
 
-import android.support.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class MovieDetailsModel implements Serializable {

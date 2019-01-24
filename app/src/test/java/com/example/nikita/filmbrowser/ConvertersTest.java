@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class ConvertersTest {
 
-    SearchResultModel resultModel;
+    private SearchResultModel resultModel;
 
     @Before
     public void setUp(){
@@ -19,7 +19,7 @@ public class ConvertersTest {
         resultModel.setName("Avengers");
         resultModel.setVoteAverage(5.434);
         resultModel.setOriginalTitle("Avg");
-        resultModel.setOverview("Blockbaster");
+        resultModel.setOverview("Blockbuster");
     }
 
     @Test

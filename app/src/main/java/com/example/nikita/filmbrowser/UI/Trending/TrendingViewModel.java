@@ -2,6 +2,7 @@ package com.example.nikita.filmbrowser.UI.Trending;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
@@ -9,13 +10,12 @@ import com.example.nikita.filmbrowser.Domain.Interactors.Trending.TrendingIntera
 import com.example.nikita.filmbrowser.UI.MovieListModel;
 import com.example.nikita.filmbrowser.UI.Search.ListViewState;
 
-import java.util.UUID;
-
+import androidx.work.WorkInfo;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class TrendingViewModel extends AndroidViewModel {
+class TrendingViewModel extends AndroidViewModel {
 
     MutableLiveData<ListViewState> stateLiveData = new MutableLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -37,9 +37,7 @@ public class TrendingViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         movies -> stateLiveData.setValue(ListViewState.success(movies)),
-                        throwable -> {
-                            stateLiveData.setValue(ListViewState.error(throwable.getMessage()));
-                        }
+                        throwable -> stateLiveData.setValue(ListViewState.error(throwable.getMessage()))
                 ));
     }
 
@@ -47,12 +45,8 @@ public class TrendingViewModel extends AndroidViewModel {
         trendingInteractor.startRequestFromDailyTrending();
     }
 
-    void initWM() {
-        trendingInteractor.createWMRequest();
-    }
-
-    UUID getWMId() {
-        return trendingInteractor.getWMId();
+    LiveData<WorkInfo> getWorkInfo() {
+        return trendingInteractor.getWorkInfo();
     }
 
     void updateMovie(MovieListModel movie) {

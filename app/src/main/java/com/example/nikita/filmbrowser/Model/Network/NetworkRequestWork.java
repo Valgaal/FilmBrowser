@@ -20,9 +20,9 @@ public class NetworkRequestWork extends Worker {
     public Result doWork() {
         if (Utils.isOnline()) {
             new TrendingInteractor().wmJob();
-            return Result.SUCCESS;
+            return Result.success();
         } else {
-            return Result.FAILURE;
+            return Result.failure();
         }
     }
 }
