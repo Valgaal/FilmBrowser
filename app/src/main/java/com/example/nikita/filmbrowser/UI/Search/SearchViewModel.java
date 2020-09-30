@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
-class SearchViewModel extends AndroidViewModel {
+public class SearchViewModel extends AndroidViewModel {
 
     MutableLiveData<ListViewState> stateLiveData = new MutableLiveData<>();
     private CompositeDisposable disposable = new CompositeDisposable();
