@@ -39,19 +39,24 @@ public class FragmentTrending extends Fragment implements MoviesAdapter.Favorite
         rw.setAdapter(mAdapter);
         mViewModel.stateLiveData.observe(this, this::updateScreen);
         mViewModel.getTrendingDay();
-        mSwipe.setOnRefreshListener(() -> {
-            mViewModel.startRequestFromDailyTrending();
-            mViewModel.getWorkInfo().observe(this, workInfo -> {
-                if (workInfo != null) {
-                    if (workInfo.getState().isFinished()) {
-                        mViewModel.getTrendingDay();
-                    } else {
-                        mViewModel.stateLiveData.setValue(ListViewState.loading());
-                    }
-                }
-            });
-        });
+        if (mViewModel.stateLiveData.getValue() == null) {
+            getListMovie();
+        }
+        mSwipe.setOnRefreshListener(this::getListMovie);
         return view;
+    }
+
+    private void getListMovie() {
+        mViewModel.startRequestFromDailyTrending();
+        mViewModel.getWorkInfo().observe(this, workInfo -> {
+            if (workInfo != null) {
+                if (workInfo.getState().isFinished()) {
+                    mViewModel.getTrendingDay();
+                } else {
+                    mViewModel.stateLiveData.setValue(ListViewState.loading());
+                }
+            }
+        });
     }
 
     private void updateScreen(ListViewState listViewState) {
